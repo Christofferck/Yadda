@@ -1,0 +1,98 @@
+[{
+  "_id": {
+    "$oid": "6085e10cc1c0715e8855eec2"
+  },
+  "name": "asdasd",
+  "username": "asedasd",
+  "email": "jdj@djaiwd.com",
+  "password": "$2b$10$1OtWO0sDvFdiPkxRbq2JV.cBRxlg2W9ZtF1XDJmTo0ac6vedbQAd2",
+  "gender": "Male"
+},{
+  "_id": {
+    "$oid": "6086635f384f6607006853ab"
+  },
+  "name": "Christoffer",
+  "username": "erikisgay",
+  "email": "fladudler@hotmail.com",
+  "password": "$2b$10$0j00ktsFxPjHAVtY3qSHBeiDVxYcirX./IRMYaopf1OSgwT72J4dm",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZsYWR1ZGxlckBob3RtYWlsLmNvbSIsImlhdCI6MTYxOTUyMTQ1NX0.p2Rj0da7pFqRJeC9YJ0bRYHFU-lbWificUl7bhUGrwk"
+},{
+  "_id": {
+    "$oid": "6086850748ce39431c87496e"
+  },
+  "name": "Bob",
+  "username": "Booba",
+  "email": "Booba@live.dk",
+  "password": "$2b$10$NIGy4IpXmJsnMtyXuVc1beQlbfqPY3EbWbisL9gtit1D0ScVAbS6y",
+  "gender": "Male"
+},{
+  "_id": {
+    "$oid": "608690026d8d5f5f80453ca3"
+  },
+  "name": "kalle",
+  "username": "kalmar",
+  "email": "kalmar@mail.dk",
+  "password": "$2b$10$fVW0S/B8cdsRaKyYCofHR.eulm604Q7aEqAFqLhzZWk2I1I/SM4si",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthbG1hckBtYWlsLmRrIiwiaWF0IjoxNjE5NTIwMTA4fQ.tXAZ5hdIb6vKC-iLz6S02K2NwUIA1JEPIcWqgnGeJqg"
+},{
+  "_id": {
+    "$oid": "6086917e6d8d5f5f80453ca4"
+  },
+  "name": "nickolaj",
+  "username": "Niggolaj",
+  "email": "nickolaj@live.dk",
+  "password": "$2b$10$sXBKmlWrUyezrur7p8WUxeR2vsOW13xFW4ghLfMOXYIuC.AZ1I4bq",
+  "gender": "Male"
+},{
+  "_id": {
+    "$oid": "6086a8fab5242614b0c52c8b"
+  },
+  "name": "Christoffer",
+  "username": "Kalmar",
+  "email": "Christoffer@live.dk",
+  "password": "$2b$10$fV1Jfdsmq/qUu3NN979Mh.E9mXISWF1EWo/JlJ1DwQds4orrn4n72",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkNocmlzdG9mZmVyQGxpdmUuZGsiLCJpYXQiOjE2MTk0Mzc4NDB9.Vwl1hp2UNPYlRE3DraJ76ljtqEBOclwykqj5oToKNsE"
+},{
+  "_id": {
+    "$oid": "6086b29eb5242614b0c52c8c"
+  },
+  "name": "erikgay",
+  "username": "erikgay",
+  "email": "erikisgay@live.dk",
+  "password": "$2b$10$PpFWO3OGr0oY6ig8kQrDJON02dRnTJJjEekcXcgzgViBEvx19oODC",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtpc2dheUBsaXZlLmRrIiwiaWF0IjoxNjE5NDQwMzA0fQ.412Tm2F6EhUTYKE1XFlnCcszdf4JbsHI9dj2319m35o"
+},{
+  "_id": {
+    "$oid": "60873e9b7a25013f0099a511"
+  },
+  "name": "Kalle",
+  "username": "inviscuz",
+  "email": "kalle@live.dk",
+  "password": "$2b$10$yAAftLAPCx4LPP4HYEejMO2QVaBzuwn0xkji3Sm96n1/p0VOnD1Qa",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthbGxlQGxpdmUuZGsiLCJpYXQiOjE2MTk3MDI2NzF9.OHI867PJe12d1bnZax2HsR38_jtoeriSmWnX0oPiElc"
+},{
+  "_id": {
+    "$oid": "6087e23000764007a0a482bf"
+  },
+  "name": "erik",
+  "username": "erikgay1",
+  "email": "erikgay@live.dk",
+  "password": "$2b$10$t/MaPWqrgliiUrUvVFZru.spCUuyfV6Mu4K6agB8pUGGRmTacYE6K",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVyaWtnYXlAbGl2ZS5kayIsImlhdCI6MTYxOTUxODAwOX0.WB0a8r3L8h2CQwPEgTHYMqtiq8bRVI-hPhw-jLM1G_U"
+},{
+  "_id": {
+    "$oid": "60892b506ad29252d8ddf53d"
+  },
+  "name": "Christoffer",
+  "username": "Chriller",
+  "email": "christoffer@live.dk",
+  "password": "$2b$10$UT7AVCStvudFQde96TgXZ.C5blfGoVvtCkULDkP25MQJd3iiK8dJq",
+  "gender": "Male",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNocmlzdG9mZmVyQGxpdmUuZGsiLCJpYXQiOjE2MTk2MDIyNjh9.QLuYfsKMR-3OSs-7ZI5UcMNuRtZ5hMHki0sAQSq8nqc"
+}]
