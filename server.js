@@ -14,7 +14,7 @@ var http = require("http").createServer(app);
 //hasher passwords
 var bcrypt = require("bcrypt");
 //se filer i dit projekt nemmere
-var filesystem = require("fs");
+var fileSystem = require("fs");
 
 //bliver brugt til authentication hvor brugeren får en personlig webtoken
 var jwt = require("jsonwebtoken");
@@ -168,5 +168,106 @@ http.listen(3000, function () {
                   app.get("/logout", function(request, result){
                       result.redirect("/login");
                   });
-               });
+
+                  app.post("/uploadCoverPhoto", function (request, result){
+                      var accessToken = request.fields.accessToken;
+                      var coverPhoto = "";
+
+                      database.collection("users").findOne({
+                          "accessToken": accessToken
+                      }, function (error, user) {
+                          if (user == null) {
+                              result.json({
+                                  "status": "error",
+                                  "message": "User has been logged out. Please try again"
+                              });
+                          } else {
+                              if (request.files.coverPhoto.size > 0 && request.files.coverPhoto.type.includes("image")) {
+
+                                if (user.coverPhoto !="") {
+                                    fileSystem.unlink(user.coverPhoto, function (error) {
+                                      //  
+                                    });
+                                }
+                                coverPhoto = "public/image/" + new Date().getTime() + "-" + request.files.coverPhoto.name;
+                                fileSystem.rename(request.files.coverPhoto.path, coverPhoto, function (error){
+                                    
+                                });
+                              
+                              
+                              database.collection("users").updateOne({
+                                  "accessToken": accessToken
+                              }, {
+                                  $set: {
+                                      "coverPhoto": coverPhoto
+                                  }
+                              }, function (error, data) {
+                                  result.json({
+                                      "status": "status",
+                                      "message": "Cover photo has been updated.",
+                                      data: mainURL + "/" + coverPhoto
+                                  }); 
+                              });
+                            } else {
+                                result.json({
+                                    "status": "error",
+                                    "message": "Please select valid image." 
+                                })
+                            };
+                         
+                    };
+                });
             });
+                    app.post("/uploadProfileImage", function (request, result ) {
+                        var accessToken = request.fields.accessToken;
+                        var profileImage = "";
+
+                        database.collection("users"). findOne ({
+                            "accessToken": accessToken
+                        }, function (error, user) {
+                            if (user == null) {
+                                result.json({
+                                    "status": "error",
+                                    "message": "User has been logged out please login again."
+                                });
+                            } else {
+                                
+                                if (request.files.profileImage.size > 0 && request.files.profileImage.type.includes("image")) {
+
+                                    if (user.profileImage !="") {
+                                        fileSystem.unlink(user.profileImage, function (error) {
+                                            //
+                                        });
+                                    }
+
+                                    profileImage = "public/image/" + new Date().getTime() + "-" + request.files.profileImage.name;
+                                    fileSystem.rename(request.files.profileImage.path, profileImage, function (error) {
+
+                                    });
+
+                                    database.collection("users").updateOne({
+                                        "accessToken": accessToken
+                                    }, {
+
+                                        $set: {
+                                            "profileImage": profileImage
+                                        }
+                                    }, function (error, data) {
+                                        result.json({
+                                            "status": "status",
+                                            "message": "Profile image has been updated.",
+                                            data: mainURL + "/" + profileImage
+                                        });
+                                    });
+                                } else {
+                                    result.json({
+                                        "status": "error",
+                                        "message": "Please select valid image."
+                                    });
+                                };
+                            };
+                            
+                        });
+                   });
+                })
+            })
