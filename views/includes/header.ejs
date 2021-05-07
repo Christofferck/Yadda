@@ -1,41 +1,31 @@
-<html>
+<nav>
+  <div class="logo">
+    <a href="/">
+      <img src="/public/img/widepeepo.png">
+    </a>
+  </div>
 
-<head>
-    <title>Social Network</title>
-    <link rel="stylesheet" href="/public/css/main.min.css">
-    <link rel="stylesheet" href="/public/css/style.css">
-    <link rel="stylesheet" href="/public/css/color.css">
-    <link rel="stylesheet" href="/public/css/responsive.css">
-</head>
+  <div class="links">
+    <a href="login">login</a>
+    <a href="signup">signup</a>
+  </div>
 
-<body>
+  <div class="settings">
+    <button id="theme-toggle" type="button" name="theme"></button>
+  </div>
 
-    <div class="theme-layout">
-    <div class="topbar stick">
-        <div class="logo">
-            <a href="/">
-                <img src="/public/img/widepeepo.png">
-            </a>
-        </div>
+</nav>
 
-        <div class="top-area">
-            <ul class="main-menu" id="main-menu"></ul>
+<script>
+  var mainURL = "http://localhost:3000";
+</script>
+<style>
 
-            <ul class="setting-area"></ul>
+  #post-img-preview,
+  #post-video-preview {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+  }
 
-        </div>
-    </div>
-    </div>
-    <script>
-        var mainURL = "http://localhost:3000";
-    </script>
-    <style>
-        #post-img-preview,
-        #post-video-preview {
-            height: 300px;
-            width: 300px;
-            object-fit: cover;
-        }
-    </style>
-</body>
-</html>
+</style>

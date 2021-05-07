@@ -9,6 +9,7 @@ var mongodb = require("mongodb");
 var mongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 
+
 //http starter servern
 var http = require("http").createServer(app);
 //hasher passwords
@@ -16,13 +17,22 @@ var bcrypt = require("bcrypt");
 //se filer i dit projekt nemmere
 var fileSystem = require("fs");
 
+
 //bliver brugt til authentication hvor brugeren får en personlig webtoken
 var jwt = require("jsonwebtoken");
 var accessTokenSecret = "myAccessTokenSecret1234567890";
 
+
+//Express layouts
+var expressLayouts = require('express-ejs-layouts');
+app.use(expressLayouts);
+
+
 //ejs er design virker ligesom html css
 app.use("/public", express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
+app.set('layout', 'layouts/layout')
+
 
 //socket.io er med til realtime communication så brugeren ikke skal refreshe deres side konstant
 var socketIO = require("socket.io")(http);
@@ -43,6 +53,11 @@ http.listen(3000, function () {
     mongoClient.connect("mongodb://localhost:27017", function(error, client){
         var database = client.db("eksamens_projekt");
         console.log("Database connected.");
+
+        app.get("/", function (request, result){
+            result.render("index");
+
+        });
 
         app.get("/signup", function (request, result){
             result.render("signup");
@@ -163,7 +178,7 @@ http.listen(3000, function () {
                                   "data": user
                               });
                           }
-                      });   
+                      });
                   });
                   app.get("/logout", function(request, result){
                       result.redirect("/login");
@@ -186,15 +201,15 @@ http.listen(3000, function () {
 
                                 if (user.coverPhoto !="") {
                                     fileSystem.unlink(user.coverPhoto, function (error) {
-                                      //  
+                                      //
                                     });
                                 }
                                 coverPhoto = "public/image/" + new Date().getTime() + "-" + request.files.coverPhoto.name;
                                 fileSystem.rename(request.files.coverPhoto.path, coverPhoto, function (error){
-                                    
+
                                 });
-                              
-                              
+
+
                               database.collection("users").updateOne({
                                   "accessToken": accessToken
                               }, {
@@ -206,15 +221,15 @@ http.listen(3000, function () {
                                       "status": "status",
                                       "message": "Cover photo has been updated.",
                                       data: mainURL + "/" + coverPhoto
-                                  }); 
+                                  });
                               });
                             } else {
                                 result.json({
                                     "status": "error",
-                                    "message": "Please select valid image." 
+                                    "message": "Please select valid image."
                                 })
                             };
-                         
+
                     };
                 });
             });
@@ -231,7 +246,7 @@ http.listen(3000, function () {
                                     "message": "User has been logged out please login again."
                                 });
                             } else {
-                                
+
                                 if (request.files.profileImage.size > 0 && request.files.profileImage.type.includes("image")) {
 
                                     if (user.profileImage !="") {
@@ -266,7 +281,7 @@ http.listen(3000, function () {
                                     });
                                 };
                             };
-                            
+
                         });
                    });
                 })

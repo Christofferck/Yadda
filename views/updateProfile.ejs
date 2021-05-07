@@ -1,5 +1,3 @@
-<%- include ("includes/header") %>
-
 <!-- CoverBilled -->
 <section>
     <div class="feature-photo">
@@ -54,7 +52,7 @@
     function showProfileData() {
         document.querySelector(".cover-photo").setAttribute("src", mainURL + "/" + window.user.coverPhoto);
         document.querySelector(".profile-image").setAttribute("src", mainURL + "/" + window.user.profileImage);
-        
+
     }
     function uploadCoverPhoto(form) {
         var form = document.getElementById("form-cover-photo");

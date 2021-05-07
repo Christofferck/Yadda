@@ -1,0 +1,24 @@
+*{
+  margin: 0;
+}
+
+header {
+  background-color: #d1d1d1;
+  padding: 10px
+}
+
+header nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+header nav >* {
+  margin: 0 100px 0 0;
+}
+
+header nav .settings {
+  position: absolute;
+  right: 0;
+}

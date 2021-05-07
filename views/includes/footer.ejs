@@ -9,10 +9,12 @@
 </footer>
 </div>
 
-<script src="/public/js/jquery-3.3.1.min.js"></script>
+<!--<script src="/public/js/jquery-3.3.1.min.js"></script>
 <script src="/public/js/script.js"></script>
 <script src="/public/js/main.min.js"></script>
-<script src="/public/js/socket.io.js"></script>
+<script src="/public/js/socket.io.js"></script>-->
+
+<script src="public/js/themes.js"></script>
 
 <script>
 
@@ -44,7 +46,7 @@
             formData.append("accessToken", localStorage.getItem("accessToken"));
             ajax.send(formData);
          } else {
-                showMainMenu(); 
+                showMainMenu();
             }
 
     }
@@ -52,26 +54,26 @@
         var html = "";
 
         if (localStorage.getItem("accessToken")) {
-           
+
             html += '<li>';
             html += '<a href="/pages">Pages</a>';
             html += '</li>';
-            
+
             html += '<li>';
-            html += '<a href="/groups">Groups</a>'; 
+            html += '<a href="/groups">Groups</a>';
             html += '</li>';
 
             html += '<li>';
             html += '<a href="/updateProfile">Profile</a>';
             html += '</li>';
-              
-            html += '<li>';
-            html += '<a href="/logout" onclick="return doLogout();">Logout</a>';  
-            html += '</li>'; 
 
-           
-        } else {   
- 
+            html += '<li>';
+            html += '<a href="/logout" onclick="return doLogout();">Logout</a>';
+            html += '</li>';
+
+
+        } else {
+
             html += '<li>';
             html += '<a href="/login">Login</a>';
             html += '</li>';
