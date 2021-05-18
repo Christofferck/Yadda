@@ -324,11 +324,176 @@ http.listen(3000, function () {
 							"status": "status",
 							"message": "Profile has been updated."
 						});
-					}
-                    
-                    )
-			};
+					});
+				}
+			});
 		});
-     });
-})
+
+		app.get("/post/:id", function (request, result) {
+			database.collection("posts").findOne({
+				"_id": ObjectId(request.params.id)
+			}, function (error, post) {
+				if (post == null) {
+					result.send({
+						"status": "error",
+						"message": "Post does not exist."
+					});
+				} else {
+					result.render("postDetail", {
+						"post": post
+					});
+				}
+			});
+		});
+
+		app.get("/", function (request, result) {
+			result.render("index");
+		});
+
+		app.post("/addPost", function (request, result) {
+
+			var accessToken = request.fields.accessToken;
+			var caption = request.fields.caption;
+			var image = "";
+			var video = "";
+			var type = request.fields.type;
+			var createdAt = new Date().getTime();
+			var _id = request.fields._id;
+
+			database.collection("users").findOne({
+				"accessToken": accessToken
+			}, function (error, user) {
+				if (user == null) {
+					result.json({
+						"status": "error",
+						"message": "User has been logged out. Please login again."
+					});
+				} else {
+
+					if (request.files.image.size > 0 && request.files.image.type.includes("image")) {
+						image = "public/images/" + new Date().getTime() + "-" + request.files.image.name;
+
+						// Read the file
+	                    fileSystem.readFile(request.files.image.path, function (err, data) {
+	                        if (err) throw err;
+	                        console.log('File read!');
+
+	                        // Write the file
+	                        fileSystem.writeFile(image, data, function (err) {
+	                            if (err) throw err;
+	                            console.log('File written!');
+	                        });
+
+	                        // Delete the file
+	                        fileSystem.unlink(request.files.image.path, function (err) {
+	                            if (err) throw err;
+	                            console.log('File deleted!');
+	                        });
+	                    });
+					}
+
+					if (request.files.video.size > 0 && request.files.video.type.includes("video")) {
+						video = "public/videos/" + new Date().getTime() + "-" + request.files.video.name;
+						
+						// Read the file
+	                    fileSystem.readFile(request.files.video.path, function (err, data) {
+	                        if (err) throw err;
+	                        console.log('File read!');
+
+	                        // Write the file
+	                        fileSystem.writeFile(video, data, function (err) {
+	                            if (err) throw err;
+	                            console.log('File written!');
+	                        });
+
+	                        // Delete the file
+	                        fileSystem.unlink(request.files.video.path, function (err) {
+	                            if (err) throw err;
+	                            console.log('File deleted!');
+	                        });
+	                    });
+					}
+
+					database.collection("posts").insertOne({
+						"caption": caption,
+						"image": image,
+						"video": video,
+						"type": type,
+						"createdAt": createdAt,
+						"likers": [],
+						"comments": [],
+						"shares": [],
+						"user": {
+							"_id": user._id,
+							"name": user.name,
+							"username": user.username,
+							"profileImage": user.profileImage
+						}
+					}, function (error, data) {
+
+						database.collection("users").updateOne({
+							"accessToken": accessToken
+						}, {
+							$push: {
+								"posts": {
+									"_id": data.insertedId,
+									"caption": caption,
+									"image": image,
+									"video": video,
+									"type": type,
+									"createdAt": createdAt,
+									"likers": [],
+									"comments": [],
+									"shares": []
+								}
+							}
+						}, function (error, data) {
+
+							result.json({
+								"status": "success",
+								"message": "Post has been uploaded."
+							});
+						});
+					});
+				}
+			});
+		});
+
+		app.post("/getNewsfeed", function (request, result) {
+			var accessToken = request.fields.accessToken;
+			database.collection("users").findOne({
+				"accessToken": accessToken
+			}, function (error, user) {
+				if (user == null) {
+					result.json({
+						"status": "error",
+						"message": "User has been logged out. Please login again."
+					});
+				} else {
+
+					var ids = [];
+					ids.push(user._id);
+
+					database.collection("posts")
+					.find({
+						"user._id": {
+							$in: ids
+						}
+					})
+					.sort({
+						"createdAt": -1
+					})
+					.limit(5)
+					.toArray(function (error, data) {
+
+						result.json({
+							"status": "success",
+							"message": "Record has been fetched",
+							"data": data
+						});
+					});
+				}
+			});
+		});
+    });
 })
