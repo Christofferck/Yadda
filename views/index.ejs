@@ -36,7 +36,6 @@
 
 		var response = JSON.parse(this.responseText);
 
-		alert(response.message);
 
 		if (response.status == "success") {
 			document.getElementById("form-add-post").querySelector("input[name='image']").value = "";
@@ -114,10 +113,16 @@
 									if (data.video != "") {
 										html += '<video style="height: 359px; width: 100%;" controls src="' + mainURL + "/" + data.video + '"></video>';
 									}
+									html += '</div>';
 								html += '</div>';
+
+								html += "<div id='post-comments-" + data._id + "'>";
+									html += createCommentsSection(data);
+								html += "</div>";
+								
 							html += '</div>';
-						html += "</div>";
-					html += "</div>";
+							html += '</div>';
+
 
 				}
 				document.getElementById("newsfeed").innerHTML = html;
