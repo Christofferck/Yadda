@@ -532,6 +532,7 @@ http.listen(3000, function () {
 										},
 										"comment": comment,
 										"createdAt": createdAt,
+										"replies": []
 									}
 								}
 							}, function (error, data) {
@@ -551,6 +552,7 @@ http.listen(3000, function () {
 												},
 												"isRead": false,
 												"createdAt": new Date().getTime()
+
 											}
 										}
 									});
@@ -573,6 +575,7 @@ http.listen(3000, function () {
 											},
 											"comment": comment,
 											"createdAt": createdAt,
+											"replies": []
 										}
 									}
 								});
