@@ -6,7 +6,11 @@ app.use(formidable());
 
 var mongodb = require("mongodb");
 var mongoClient = mongodb.MongoClient;
+var mongoose = require("mongoose");
+
 var ObjectId = mongodb.ObjectId;
+
+
 
 var http = require("http").createServer(app);
 var bcrypt = require("bcrypt");
@@ -29,6 +33,79 @@ socketIO.on("connection", function (socket) {
 	socketID = socket.id;
 });
 
+//ROUTES
+const indexR = require('./routes/index');
+app.use("/", indexR);
+
+const loginR = require('./routes/login');
+app.use("/login", loginR);
+
+const getUserR = require('./routes/getUser');
+app.use("/getUser", getUserR);
+
+const logoutR = require('./routes/logout');
+app.use("/logout", logoutR);
+
+const postR = require('./routes/post');
+app.use("/post", postR);
+
+const signupR = require('./routes/signup');
+app.use("/signup", signupR);
+
+const profileR = require('./routes/profile');
+app.use("/profile", profileR);
+
+
+
+
+
+
+
+
+
+mongoose.connect("mongodb://localhost:27017/eksamens_projekt", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true })
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.log('Connected to mongoose'))
+
+
+mongoose.connection.on('open', function (ref) {
+    //get collection names
+    mongoose.connection.db.listCollections().toArray(function (err, names) {
+        console.log(names);  [{ name: 'dbname.myCollection' }]
+        module.exports.Collection = names;
+    });
+})
+
+
+
+
+
+
+
+
+
+
+
+
+app.listen(process.env.PORT || 3000)
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
 http.listen(3000, function () {
 	console.log("Server started at " + mainURL);
 
@@ -36,104 +113,10 @@ http.listen(3000, function () {
         var database = client.db("eksamens_projekt");
         console.log("Database connected.");
 
-        app.get("/signup", function (request, result){
-            result.render("signup");
-
-        });
-
-        app.post("/signup", function (request, result) {
-            var name = request.fields.name;
-            var username = request.fields.username;
-            var email = request.fields.email;
-            var password = request.fields.password;
-            var gender = request.fields.gender;
-            //checker hvis en bruger allerede existerer
-            database.collection("users").findOne({
-                $or: [{
-                    "email": email
-                }, {
-                    "username": username
-                }]
-
-            }, function (error, user){
-                if (user == null) {
-                    bcrypt.hash(password, 10, function (error, hash){
-                        database.collection("users").insertOne({
-							"name": name,
-							"username": username,
-							"email": email,
-							"password": hash,
-							"gender": gender,
-							"profileImage": "",
-							"coverPhoto": "",
-							"dob": "",
-							"city": "",
-							"country": "",
-							"aboutMe": "",
-							"friends": [],
-							"pages": [],
-							"notifications": [],
-							"groups": [],
-							"posts": []
-						}, function (error, data) {
-							result.json({
-								"status": "success",
-								"message": "Signed up successfully. You can login now."
-                            });
-
-                        });
-                    });
-                } else {
-                        result.json({
-                            "status": "error",
-                            "message": "Email or username already exist."
-
-                        });
-                    }
-                });
-            })
             app.get("/login", function (request, result) {
                 result.render("login");
             });
-    
-            app.post("/login", function (request, result) {
-                var email = request.fields.email;
-                var password = request.fields.password;
-                database.collection("users").findOne({
-                    "email": email
-                }, function (error, user) {
-                    if (user == null) {
-                        result.json({
-                            "status": "error",
-                            "message": "Email does not exist"
-                        });
-                    } else {
-                        bcrypt.compare(password, user.password, function (error, isVerify) {
-                            if (isVerify) {
-                                var accessToken = jwt.sign({ email: email }, accessTokenSecret);
-                                database.collection("users").findOneAndUpdate({
-                                    "email": email
-                                }, {
-                                    $set: {
-                                        "accessToken": accessToken
-                                    }
-                                }, function (error, data) {
-                                    result.json({
-                                        "status": "success",
-                                        "message": "Login successfully",
-                                        "accessToken": accessToken,
-                                        "profileImage": user.profileImage
-                                        });
-                                    });
-                                 } else {
-                                     result.json({
-                                         "status": "error",
-                                         "message": "Password is incorrect"
-                                     });
-                                 }
-                              });
-                        }
-                     });
+
                      app.get("/updateProfile", function (request, result) {
                         result.render("updateProfile");
                     });
@@ -156,7 +139,7 @@ http.listen(3000, function () {
                                 "data": user
                             });
                           }
-                      });   
+                      });
                   });
                   app.get("/logout", function (request, result) {
                     result.redirect("/login");
@@ -189,12 +172,12 @@ http.listen(3000, function () {
                                 fileSystem.readFile(request.files.coverPhoto.path, function (err, data) {
                                     if (err) throw err;
                                     console.log('File read!');
-        
+
                                     // Write the file
                                     fileSystem.writeFile(coverPhoto, data, function (err) {
                                         if (err) throw err;
                                         console.log('File written!');
-        
+
                                         database.collection("users").updateOne({
                                             "accessToken": accessToken
                                         }, {
@@ -393,7 +376,7 @@ http.listen(3000, function () {
 
 					if (request.files.video.size > 0 && request.files.video.type.includes("video")) {
 						video = "public/videos/" + new Date().getTime() + "-" + request.files.video.name;
-						
+
 						// Read the file
 	                    fileSystem.readFile(request.files.video.path, function (err, data) {
 	                        if (err) throw err;
@@ -496,7 +479,7 @@ http.listen(3000, function () {
 			var _id = request.fields._id;
 			var comment = request.fields.comment;
 			var createdAt = new Date().getTime();
-		
+
 			database.collection("users").findOne({
 				"accessToken": accessToken
 			}, function (error, user) {
@@ -506,7 +489,7 @@ http.listen(3000, function () {
 						"message": "User has been logged out. Please login again."
 					});
 				} else {
-		
+
 					database.collection("posts").findOne({
 						"_id": ObjectId(_id)
 					}, function (error, post) {
@@ -516,12 +499,10 @@ http.listen(3000, function () {
 								"message": "Post does not exist."
 							});
 						} else {
-		
+
 							var commentId = ObjectId();
-		
-							database.collection("posts").updateOne({
-								"_id": ObjectId(_id)
-							}, {
+
+							database.collection("posts").updateOne({"_id": ObjectId(_id)}, {
 								$push: {
 									"comments": {
 										"_id": commentId,
@@ -536,7 +517,7 @@ http.listen(3000, function () {
 									}
 								}
 							}, function (error, data) {
-		
+
 								if (user._id.toString() != post.user._id.toString()) {
 									database.collection("users").updateOne({
 										"_id": post.user._id
@@ -557,7 +538,7 @@ http.listen(3000, function () {
 										}
 									});
 								}
-		
+
 								database.collection("users").updateOne({
 									$and: [{
 										"_id": post.user._id
@@ -579,7 +560,7 @@ http.listen(3000, function () {
 										}
 									}
 								});
-		
+
 								database.collection("posts").findOne({
 									"_id": ObjectId(_id)
 								}, function (error, updatePost) {
@@ -590,15 +571,15 @@ http.listen(3000, function () {
 									});
 								});
 							});
-		
+
 						}
 					});
 				}
 			});
-			
+
 		});
-		
+
     });
 })
 
-
+*/

@@ -29,7 +29,7 @@
 
 	function doPost(form) {
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/addPost", true);
+		ajax.open("POST", "/post/add", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -58,7 +58,7 @@
 
 	function showNewsfeed() {
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/getNewsfeed", true);
+		ajax.open("POST", "/post/timeline", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -119,7 +119,7 @@
 								html += "<div id='post-comments-" + data._id + "'>";
 									html += createCommentsSection(data);
 								html += "</div>";
-								
+
 							html += '</div>';
 							html += '</div>';
 

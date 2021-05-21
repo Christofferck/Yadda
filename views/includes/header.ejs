@@ -38,7 +38,7 @@
 
 		var months = ["januar", "februar", "marts", "april", "maj", "juni", "july", "august", "september", "oktober", "november", "december"];		var months = ["januar", "februar", "marts", "april", "maj", "juni", "july", "august", "september", "oktober", "november", "december"];
 
-		
+
 		function createCommentsSection(data) {
 				var html = "";
 
@@ -51,7 +51,7 @@
 
 						html += '<li>';
 							html += '<div class="comet-avatar">';
-								html += '<img src="' + mainURL + '/' + comment.user.profileImage + '">';
+								//html += '<img src="' + mainURL + '/' + comment.user.profileImage + '">';
 							html += '</div>';
 
 							html += '<div class="we-comment">';
@@ -124,7 +124,7 @@
 			function doPostComment(form) {
 
 				var ajax = new XMLHttpRequest();
-				ajax.open("POST", "/postComment", true);
+				ajax.open("POST", "/post/comment", true);
 
 				ajax.onreadystatechange = function() {
 					if (this.readyState == 4 && this.status == 200) {
@@ -159,7 +159,7 @@
 					html += '<div class="central-meta">';
 						html += '<div class="new-postbox">';
 							html += '<figure>';
-								html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';
+								//html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';
 							html += '</figure>';
 
 							html += '<div class="newpst-input">';

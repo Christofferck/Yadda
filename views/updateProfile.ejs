@@ -67,7 +67,7 @@
 		var form = document.getElementById("form-cover-photo");
 
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/uploadCoverPhoto", true);
+		ajax.open("POST", "profile/upload/coverphoto", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -89,7 +89,7 @@
 		var form = document.getElementById("form-upload-image");
 
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/uploadProfileImage", true);
+		ajax.open("POST", "profile/upload/profileimg", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -112,7 +112,7 @@
 		form.submit.innerHTML = "<span>Loading...</span>";
 
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/updateProfile", true);
+		ajax.open("POST", "/profile/update", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -178,7 +178,7 @@
 
 										<br><br>
 
-										<div class="form-group">	
+										<div class="form-group">
 											<input type="text" class="city" name="city" />
 											<label class="control-label">City</label>
 											<i class="mtrl-select"></i>
@@ -194,7 +194,7 @@
 
 										<br><br>
 
-										<div class="form-group">	
+										<div class="form-group">
 											<textarea rows="4" class="aboutMe" name="aboutMe"></textarea>
 											<label class="control-label">About Me</label>
 											<i class="mtrl-select"></i>
