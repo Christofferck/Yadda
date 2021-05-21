@@ -150,7 +150,6 @@ router.post("/timeline", function (req, res) {
       });
     } else {
 
-     console.log('fuck');
       var ids = [];
       ids.push(user._id);
       Post.find({"user._id": {	$in: ids }}).sort({"createdAt": -1}).limit(5).exec((err,data)=> {
