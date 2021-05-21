@@ -419,9 +419,7 @@ http.listen(3000, function () {
 						"video": video,
 						"type": type,
 						"createdAt": createdAt,
-						"likers": [],
 						"comments": [],
-						"shares": [],
 						"user": {
 							"_id": user._id,
 							"name": user.name,
@@ -441,9 +439,7 @@ http.listen(3000, function () {
 									"video": video,
 									"type": type,
 									"createdAt": createdAt,
-									"likers": [],
 									"comments": [],
-									"shares": []
 								}
 							}
 						}, function (error, data) {
@@ -536,7 +532,6 @@ http.listen(3000, function () {
 										},
 										"comment": comment,
 										"createdAt": createdAt,
-										"replies": []
 									}
 								}
 							}, function (error, data) {
@@ -578,7 +573,6 @@ http.listen(3000, function () {
 											},
 											"comment": comment,
 											"createdAt": createdAt,
-											"replies": []
 										}
 									}
 								});
@@ -603,93 +597,5 @@ http.listen(3000, function () {
 		
     });
 })
-app.post("/postReply", function (request, result) {
 
-	var accessToken = request.fields.accessToken;
-	var postId = request.fields.postId;
-	var commentId = request.fields.commentId;
-	var reply = request.fields.reply;
-	var createdAt = new Date().getTime();
 
-	database.collection("users").findOne({
-		"accessToken": accessToken
-	}, function (error, user) {
-		if (user == null) {
-			result.json({
-				"status": "error",
-				"message": "User has been logged out. Please login again."
-			});
-		} else {
-
-			database.collection("posts").findOne({
-				"_id": ObjectId(postId)
-			}, function (error, post) {
-				if (post == null) {
-					result.json({
-						"status": "error",
-						"message": "Post does not exist."
-					});
-				} else {
-
-					var replyId = ObjectId();
-
-					database.collection("posts").updateOne({
-						$and: [{
-							"_id": ObjectId(postId)
-						}, {
-							"comments._id": ObjectId(commentId)
-						}]
-					}, {
-						$push: {
-							"comments.$.replies": {
-								"_id": replyId,
-								"user": {
-									"_id": user._id,
-									"name": user.name,
-									"profileImage": user.profileImage,
-								},
-								"reply": reply,
-								"createdAt": createdAt
-							}
-						}
-					}, function (error, data) {
-
-						database.collection("users").updateOne({
-							$and: [{
-								"_id": post.user._id
-							}, {
-								"posts._id": post._id
-							}, {
-								"posts.comments._id": ObjectId(commentId)
-							}]
-						}, {
-							$push: {
-								"posts.$[].comments.$[].replies": {
-									"_id": replyId,
-									"user": {
-										"_id": user._id,
-										"name": user.name,
-										"profileImage": user.profileImage,
-									},
-									"reply": reply,
-									"createdAt": createdAt
-								}
-							}
-						});
-
-						database.collection("posts").findOne({
-							"_id": ObjectId(postId)
-						}, function (error, updatePost) {
-							result.json({
-								"status": "success",
-								"message": "Reply has been posted.",
-								"updatePost": updatePost
-							});
-						});
-					});
-
-				}
-			});
-		}
-	});
-});

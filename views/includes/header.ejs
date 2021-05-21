@@ -63,7 +63,7 @@
 									date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear();
 
 									html += '<span>' + date + '</span>';
-									html += '<a class="we-reply" href="javascript:void(0);" data-post-id="' + data._id + '" data-comment-id="' + comment._id + '" onclick="prepareToReply(this);" title="Reply"><i class="fa fa-reply"></i></a>';
+									html += '<a class="we-reply" href="javascript:void(0);" data-post-id="' + data._id + '" data-comment-id="' + comment._id + '" onclick="prepareToReply(this);" title="Reply"></i></a>';
 								html += '</div>';
 
 								html += '<p>' + comment.comment + '</p>';
@@ -141,39 +141,6 @@
 							var comments = parseInt("count-post-comments-" + form._id.value);
 							comments++;
 							("count-post-comments-" + form._id.value).innerHTML = comments;
-						}
-					}
-				};
-
-				var formData = new FormData(form);
-				formData.append("accessToken", localStorage.getItem("accessToken"));
-				ajax.send(formData);
-
-				return false;
-			}
-
-			function prepareToReply(self) {
-				$("#replyModal input[name='postId']").val(self.getAttribute("data-post-id"));
-				$("#replyModal input[name='commentId']").val(self.getAttribute("data-comment-id"));
-				$("#replyModal").modal("show");
-			}
-
-			function doPostReply(form) {
-				var ajax = new XMLHttpRequest();
-				ajax.open("POST", "/postReply", true);
-
-				ajax.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-
-						var response = JSON.parse(this.responseText);
-						alert(response.message);
-
-						if (response.status == "success") {
-							form.reply.value = "";
-							$("#replyModal").modal("hide");
-
-							var commentsHtml = createCommentsSection(response.updatePost);
-							document.getElementById("post-comments-" + form.postId.value).innerHTML = commentsHtml;
 						}
 					}
 				};
