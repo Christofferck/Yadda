@@ -67,7 +67,7 @@
 		var form = document.getElementById("form-cover-photo");
 
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "profile/upload/coverphoto", true);
+		ajax.open("POST", "/profile/upload/coverphoto", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -89,7 +89,7 @@
 		var form = document.getElementById("form-upload-image");
 
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "profile/upload/profileimg", true);
+		ajax.open("POST", "/profile/upload/profileimg", true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -142,6 +142,7 @@
 					<div class="row" id="page-contents">
 
 						<div class="col-md-3">
+							<%- include ("includes/left-sidebar") %>
 						</div>
 
 						<div class="col-md-6">
@@ -209,6 +210,7 @@
 						</div>
 
 						<div class="col-md-3">
+							<%- include ("includes/right-sidebar") %>
 						</div>
 
 					</div>

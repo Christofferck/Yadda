@@ -20,13 +20,45 @@ createdAt :{
     type  : Date,
     default : Date.now
 } ,
-comments :{
-    type  : [String],
-    default : ""
-} ,
+comments :[{
+    user: {
+      _id: {
+        type: String
+      },
+      name: {
+        type: String
+      },
+      profileImage: {
+        type: String
+      }
+    },
+    comment :{
+        type  : String,
+    createdAt :{
+        type  : Date,
+        default : Date.now
+      },
+    },
+    type: Array
+  },
+
+],
 user :{
+
+    _id: {
+      type: String
+    },
+    name: {
+      type: String
+    },
+    username: {
+      type: String
+    },
+    profileImage: {
+      type: String
+    },
+
     type  : Object,
-    default : ""
 }
 });
 const Post = mongoose.model('posts',PostSchema);

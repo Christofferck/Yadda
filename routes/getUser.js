@@ -9,7 +9,7 @@ const {User} = require("../models/user");
 
 
 router.post('/', async (req,res)=>{
-  console.log('getUser');
+  //console.log('getUser');
   var accessToken = req.fields.accessToken;
     User.findOne({accessToken : accessToken}).exec((err,user)=>{
       if (user == null) {
@@ -18,7 +18,7 @@ router.post('/', async (req,res)=>{
               "message": "User has been logged out. Please login again."
           });
       } else {
-          console.log(user);
+          //console.log(user);
           res.json({
               "status": "success",
               "message": "Record has been fetched.",

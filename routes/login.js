@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
                         console.log('password correct');
                         console.log(user);
 
-                        if (/*user.isVerified == true*/true) {
+                        if (user.isVerified == true ) {
 
                             var accessToken = jwt.sign ({ email: email}, accessTokenSecret);
                             console.log('new access '+ accessToken);

@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const {User} = require("../models/user");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const sgMail = require("@sendgrid/mail");
+
 
 router.get('/', (req,res)=>{
     res.render('signup');
@@ -43,8 +45,23 @@ router.post('/', (req,res)=>{
               newUser.save()
               .then((value)=>{
                   console.log(value)
-                  //req.flash('success_msg','You have now registered!');
-                  //res.redirect(`/verify-email?token=${userObj.emailToken}`);
+                  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+                  console.log(process.env.SENDGRID_API_KEY);
+                  const msg = {
+                  to: 'nickolaj15@gmail.com', // Change to your recipient
+                  from: 'nickolaj99@outlook.com', // Change to your verified sender
+                  subject: 'Sending with SendGrid is Fun',
+                  text: 'and easy to do anywhere, even with Node.js',
+                  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                  }
+                  sgMail.send(msg)
+                  .then((response) => {
+                      console.log (response[0].statusCode + 'Email sent')
+                      console.log (response[0].headers)
+                  })
+                  .catch((error) => {
+                      console.error(error)
+                  })  
               })
               .catch(value=> console.log(value));
 

@@ -40,7 +40,10 @@
 
 
 		function createCommentsSection(data) {
-				var html = "";
+        console.log(typeof data.comments[0]);
+        console.log(JSON.stringify(data.comments[0]) );
+        console.log( data.comments[0]);
+        var html = "";
 
 				html += '<div class="coment-area">';
 					html += '<ul class="we-comet" style="max-height: 300px; overflow-y: scroll;">';
@@ -159,7 +162,7 @@
 					html += '<div class="central-meta">';
 						html += '<div class="new-postbox">';
 							html += '<figure>';
-								//html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';
+								html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';
 							html += '</figure>';
 
 							html += '<div class="newpst-input">';
