@@ -40,21 +40,21 @@
 
 
 		function createCommentsSection(data) {
-        console.log(typeof data.comments[0]);
+        //console.log(typeof data.comments[0][0]);
       //  console.log(JSON.stringify(data.comments[0]) );
-        console.log(data.comments);
+        //console.log(data.comments[0][0].user);
         var html = "";
 
 				html += '<div class="coment-area">';
 					html += '<ul class="we-comet" style="max-height: 300px; overflow-y: scroll;">';
 
-					data.comments = data.comments.reverse();
+					//data.comments = data.comments[0][0].reverse();
 					for (var b = 0; b < data.comments.length; b++) {
-						var comment = data.comments[b];
+						var comment = data.comments[b][0];
 
 						html += '<li>';
 							html += '<div class="comet-avatar">';
-								//html += '<img src="' + mainURL + '/' + comment.user.profileImage + '">';
+								html += '<img src="' + mainURL + '/' + comment.user.profileImage + '">';
 							html += '</div>';
 
 							html += '<div class="we-comment">';
@@ -74,7 +74,7 @@
 
 							html += '<ul>';
 
-								comment.replies = comment.replies.reverse();
+							/*	comment.replies = comment.replies.reverse();
 
 								for (var c = 0; c < comment.replies.length; c++) {
 									var reply = comment.replies[c];
@@ -97,7 +97,7 @@
 											html += '<p>' + reply.reply + '</p>';
 										html += '</div>';
 									html += '</li>';
-								}
+								}*/
 								html += '</ul>';
 
 						html += '</li>';

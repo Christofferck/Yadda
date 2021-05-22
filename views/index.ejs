@@ -30,6 +30,7 @@
 	var isHomePage = true;
 
 	function doPost(form) {
+			showNewsfeed();
 		var ajax = new XMLHttpRequest();
 		ajax.open("POST", "/post/add", true);
 
@@ -46,7 +47,7 @@
 			document.getElementById("post-img-preview").style.display = "none";
 			document.getElementById("post-video-preview").style.display = "none";
 
-			showNewsfeed();
+
 			}
 		}
 	};
@@ -54,6 +55,8 @@
 		var formData = new FormData(form);
 		formData.append("accessToken", localStorage.getItem("accessToken"));
 		ajax.send(formData);
+
+
 
 		return false;
 	}
