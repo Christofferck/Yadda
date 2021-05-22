@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/public/css/style.css">
     <link rel="stylesheet" href="/public/css/color.css">
     <link rel="stylesheet" href="/public/css/responsive.css">
+    <link rel="stylesheet" href="/public/css/includes.css">
 </head>
 
 <body>
@@ -19,8 +20,7 @@
     <div class="topbar stick">
         <div class="logo">
             <a href="/">
-                <img src="/public/img/widepeepo.png">
-				YaSite
+                <img src="/public/img/yasite_logo.png">
             </a>
         </div>
 
@@ -41,8 +41,8 @@
 
 		function createCommentsSection(data) {
         console.log(typeof data.comments[0]);
-        console.log(JSON.stringify(data.comments[0]) );
-        console.log( data.comments[0]);
+      //  console.log(JSON.stringify(data.comments[0]) );
+        console.log(data.comments);
         var html = "";
 
 				html += '<div class="coment-area">';

@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
 
 
 //GET POST
-/*router.get("/:id", function (req, res) {
+router.get("/:id", function (req, res) {
 
   User.findOne({accessToken : accessToken}).exec((err,user)=>{
 
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
     }
   });
 });
-*/
+
 
 
 //ADD POST
