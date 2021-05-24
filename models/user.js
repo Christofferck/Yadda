@@ -6,7 +6,7 @@ const UserSchema  = new mongoose.Schema({
   } ,
   username :{
       type  : String,
-      required : true
+      required : true,
   } ,
   email :{
     type  : String,
@@ -44,17 +44,9 @@ aboutMe :{
     type  : String,
     default : ""
 } ,
-pages :{
-    type  : [String],
-    default : ""
-} ,
-notifications :{
-    type  : [String],
-    default : ""
-},
-groups :{
+following :{
     type : [String],
-    default : ""
+    default: ""
 },
 posts :{
     type : [String],

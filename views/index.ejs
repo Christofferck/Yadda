@@ -65,8 +65,19 @@
 	}
 
 	function showNewsfeed() {
+
+		var url = window.location.href.split('/');
+		var hashtagURL = url.pop() || url.pop();
+
+	
+		var postReq = "/post/timeline"
+		if(url.slice(-2, -1)[0] == 'post') {
+			postReq = `/post/hashtag/${hashtagURL}`
+		}
+
+
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "/post/timeline", true);
+		ajax.open("POST", postReq, true);
 
 		ajax.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -89,7 +100,7 @@
 									html += '<ins>';
 										if (data.type == "post")
 										{
-											html += '<a href="/user/' + data.user.username + '">';
+											html += '<a href="/profile/u/' + data.user.username + '">';
 												html += data.user.name;
 											html += '</a>';
 										}

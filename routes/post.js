@@ -23,9 +23,11 @@ router.post('/', async (req, res) => {
 
 
 //GET POST
-router.get("/:id", function (req, res) {
+router.get("/:id", function(req, res) {
 
-  User.findOne({accessToken : accessToken}).exec((err,user)=>{
+  User.findOne({
+    accessToken: accessToken
+  }).exec((err, user) => {
 
     if (post == null) {
       res.send({
@@ -141,14 +143,12 @@ router.post('/add', async (req, res) => {
 
 //TIMELINE
 
-router.post("/timeline", function(req, res) {
+router.post("/timeline", async function(req, res) {
   var accessToken = req.fields.accessToken;
   //console.log("token: " + accessToken);
 
 
-  User.findOne({
-    accessToken: accessToken
-  }).exec((err, user) => {
+  User.findOne({accessToken: accessToken}).exec((err, user) => {
     //console.log(user);
     if (user == null) {
       res.json({
@@ -157,30 +157,60 @@ router.post("/timeline", function(req, res) {
       });
     } else {
 
-      var ids = [];
-      ids.push(user._id);
-      Post.find({
-        "user._id": {
-          $in: ids
+      var yaddaDisplay
+      var data;
+
+      console.log(req.fields.profile);
+      if (req.fields.profile !== undefined) {
+        yaddaDisplay = [req.fields.profile];
+      } else {
+        yaddaDisplay = user.following;
+        yaddaDisplay.push(user.username)
+      }
+
+
+      Post.find().where('user.username').in(yaddaDisplay).sort({"createdAt": -1}).exec((err, post) => {
+
+      //Post.find({yaddaDisplay}).sort({"createdAt": -1}).exec((err, post) => {
+        data;
+        dataArr = []
+        var a = 0;
+
+        for (var i = 0; i < post.length; i++) {
+          data = post
+
+          User.find({username: data[i].user.username}).exec((err, userData) => {
+
+            data[a].user.name = userData[0].name
+            data[a].user.profileImage = userData[0].profileImage
+            data[a].caption = hashTag(data[a].caption);
+
+            a++
+
+            if (a === post.length) { // and then test if all done
+              //console.log(dataArr[1]);
+              res.json({
+                "status": "success",
+                "message": "Record has been fetched",
+                "data": data
+              })
+            }
+          })
         }
-      }).sort({
-        "createdAt": -1
-      }).limit(5).exec((err, data) => {
-        //console.log(data);
-        res.json({
-          "status": "success",
-          "message": "Record has been fetched",
-          "data": data
-        })
       })
     }
+
+
+
   })
 })
 
 
+
+
+
+
 /*REPLY*/
-
-
 
 router.post("/comment", async function(req, res) {
 
@@ -191,9 +221,7 @@ router.post("/comment", async function(req, res) {
   var comment = req.fields.comment;
   var createdAt = new Date().getTime();
 
-  User.findOne({
-    accessToken: accessToken
-  }).exec((err, user) => {
+  User.findOne({  accessToken: accessToken}).exec((err, user) => {
     //console.log(user);
     if (user == null) {
       res.json({
@@ -213,7 +241,9 @@ router.post("/comment", async function(req, res) {
           var commentId = mongoose.Types.ObjectId();
           console.log('comment ID ' + commentId);
 
-          Post.updateOne({_id: _id}, {
+          Post.updateOne({
+            _id: _id
+          }, {
             $push: {
               comments: {
                 _id: commentId,
@@ -232,7 +262,12 @@ router.post("/comment", async function(req, res) {
               console.log(err);
             }
 
-            User.updateOne({$and: [{  _id: _id}, {"posts._id": post._id}]
+            User.updateOne({
+              $and: [{
+                _id: _id
+              }, {
+                "posts._id": post._id
+              }]
             }, {
               $push: {
                 "posts.$[].comments": {
@@ -248,7 +283,9 @@ router.post("/comment", async function(req, res) {
               }
             });
 
-            Post.findOne({_id: _id}).exec((err, updatePost) => {
+            Post.findOne({
+              _id: _id
+            }).exec((err, updatePost) => {
               console.log(updatePost);
               res.json({
                 "status": "success",
@@ -266,14 +303,65 @@ router.post("/comment", async function(req, res) {
       });
     }
   });
-
-
-
-
-
-
 })
 
+// Hashtags
+
+const hashTag = function (yadda) {
+	const regex = /(\#)(\w+)/g;
+	let subst = `<a href='/post/hashtag/$2'> $1$2 </a>`;
+	let txt = yadda.replace(regex, subst);
+	return txt;
+};
+
+
+
+router.get('/hashtag/:hashtag', (req, res) => {
+  res.render('index');
+  
+  Post.find( {caption: /req.params.hashtag/ } , function(errs, data){
+    if(errs){
+        res.send(errs); 
+    }
+});
+})
+
+router.post("/hashtag/:hashtag", async function(req, res) {
+  var accessToken = req.fields.accessToken;
+  //console.log("token: " + accessToken);
+
+
+  User.findOne({accessToken: accessToken}).exec((err, user) => {
+    //console.log(user);
+    if (user == null) {
+      res.json({
+        "status": "error",
+        "message": "User has been logged out. Please login again."
+      });
+    } else {
+
+      var ids = [];
+      ids.push(user._id);
+      Post.find({"caption": { "$regex": req.params.hashtag, "$options": "i" }}).sort({"createdAt": -1}).exec((err, data) => {
+        console.log(data)
+        console.log(data[0].caption);
+        var tag = 0;
+        for (let index = 0; index < data.length; index++) {
+          data[index].caption = hashTag(data[index].caption);
+          tag++
+        } 
+          if (
+          tag == data.length
+          ) 
+        {res.json({
+          "status": "success",
+          "message": "Record has been fetched",
+          "data": data
+        })}
+      })
+    }
+  })
+})
 
 
 

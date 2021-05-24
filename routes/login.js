@@ -16,15 +16,13 @@ var accessTokenSecret = "myAccessTokenSecret1234567890";
 router.get('/', (req, res) => {
   res.render("login");
 })
-
-
       router.post('/', async (req,res)=>{
         var email = req.fields.email;
         var password = req.fields.password;
 
         User.findOne({email : email}).exec((err,user)=>{
             if(user) {
-                console.log(user);
+                //console.log(user);
 
                 bcrypt.compare(password,user.password,(err,isMatch)=>{
                     if(err) throw err;
@@ -32,7 +30,7 @@ router.get('/', (req, res) => {
                         console.log('password correct');
                         console.log(user);
 
-                        if (user.isVerified == true ) {
+                        if (/*user.isVerified == true*/ true ) {
 
                             var accessToken = jwt.sign ({ email: email}, accessTokenSecret);
                             console.log('new access '+ accessToken);

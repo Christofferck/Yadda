@@ -54,12 +54,12 @@
 
 						html += '<li>';
 							html += '<div class="comet-avatar">';
-								html += '<img src="' + mainURL + '/' + comment.user.profileImage + '">';
+								html += '<img src="' + mainURL + '/' + user.profileImage + '">';
 							html += '</div>';
 
 							html += '<div class="we-comment">';
 								html += '<div class="coment-head">';
-									html += '<h5><a href="/">' + comment.user.name + '</a></h5>';
+									html += '<h5><a href="/">' + user.name + '</a></h5>';
 
 									var createdAt = new Date(comment.createdAt);
 									var date = createdAt.getDate() + "";

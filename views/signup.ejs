@@ -84,6 +84,17 @@
             </div>
         
             <script>
+                function checkValidity() {
+                    var input = document.getElementById("email").value;
+                    var checkfor = /(?!)(\w+@\w\.)(com|dk|org|net|eu)/;
+
+                    if ((checkfor.test(input) === false)) {
+                        alert("Email is not an email - Please input a real Email for verification")
+                    } else {
+                        alert("Your email is true - You will receive a verification email shortly.")
+                    }
+                }
+
                 function doRegister(form) {
                     form.submit.setAttribute("disabled", "disabled");
                     form.submit.innerHTML = "<span>Loading...</span>";
