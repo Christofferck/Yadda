@@ -1,0 +1,139 @@
+
+body {
+  background-color: #1c1c1c;
+  color: white;
+}
+
+.gray-bg {
+  background-color: #1c1c1c;
+  color: white;
+}
+
+
+header {
+  background-color: #242424;
+  color: white;
+}
+
+.topbar{
+  background-color: #242424;
+  color: white;
+}
+
+.navLink  {
+    color: white;;
+}
+
+.navLink:hover  {
+  color: #00a9d1;
+}
+
+
+a {
+  color: #00a9d1;
+}
+
+
+input {
+  background-color: #404040;
+}
+
+
+
+footer{
+  background-color: #242424;
+  color: white;
+}
+
+/*POSTS*/
+.newPost {
+  background-color: #404040;
+  color: white;
+  border: 1px solid #242424
+}
+
+.newPost textarea{
+  background-color: rgba(0, 0, 0, 0.0);
+  color: white;
+  margin: 0 auto;
+
+
+}
+.attachments {
+    color: white;
+      background-color: #242424;
+    border-radius: 5px;
+    box-shadow: inset 0 0 12px 4px rgba(0, 0, 0, 0.1);
+}
+
+.newPost ul{
+  padding: 10px;
+}
+
+.post{
+  background-color: #404040;
+  color: white;
+  border: 1px solid #242424
+}
+
+
+.comment {
+  display: flex;
+
+  background-color: #242424;
+  color: white;
+  border-radius: 5px;
+  box-shadow: inset 0 0 12px 4px rgba(0, 0, 0, 0.1);
+}
+
+.description p{
+    color: white;
+}
+
+
+
+/*>Update profile */
+.form-group input{
+  color: #70756a;
+}
+
+
+.form-group input:focus{
+  color: white;
+}
+
+.f-title {
+  color: white;
+}
+
+
+
+.log-reg-area {
+  background-color: #404040;
+  box-shadow: inset 0 0 12px 4px rgba(0, 0, 0, 0.6);
+}
+
+.login-reg-bg {
+  background-color: #1c1c1c;
+}
+
+
+.we-comet::-webkit-scrollbar, body::-webkit-scrollbar, .newpst-input::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 30px #404040;
+    border-radius: 10px;
+}
+
+.we-comet::-webkit-scrollbar-track, .newpst-input::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 30px #242424;
+    border-radius: 10px;
+}
+
+
+.we-comet::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb, .newpst-input::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 30px #088dcd;
+}

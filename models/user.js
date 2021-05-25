@@ -22,11 +22,11 @@ gender :{
 } ,
 profileImage :{
     type  : String,
-    default : ""
+    default : "public/img/default_profile.jpg"
 } ,
 coverPhoto :{
     type  : String,
-    default : ""
+    default : "public/img/default_cover.jpg"
 } ,
 dob :{
     type  : String,
@@ -46,7 +46,6 @@ aboutMe :{
 } ,
 following :{
     type : [String],
-    default: ""
 },
 posts :{
     type : [String],

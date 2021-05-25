@@ -1,53 +1,82 @@
 <%- include ("includes/header") %>
+
+
+
 <main>
 	<section>
-		<div class="feature-photo">
 
-			<figure>
-				<img class="cover-photo" id="cover-photo" style="width: 100%; height: 700px; object-fit: cover;" onerror="this.src = '<%= user.coverPhoto %>'" />
-			</figure>
 
-			<div class="container-fluid">
-				<div class="row merged">
-					<div class="col-md-2">
-						<div class="user-avatar">
-							<figure>
+		<section>
+			<div class="feature-photo">
 
-								<img class="profile-image" id="profile-image" style="width: 100%; height: 150px; object-fit: cover;" onerror="this.src = '<%= user.profileImage %>'" />
+				<figure>
+					<img class="cover-photo" id="cover-photo" style="width: 100%; height: 400px; object-fit: cover;" src="<%-data.mainURL%>/<%- data.coverPhoto%>" />
+				</figure>
+				<div class="container-fluid">
+					<div class="row merged">
+						<div class="col-md-2">
+							<div class="user-avatar">
+								<figure>
 
-							</figure>
+									<img class="profile-image" id="profile-image" style="width: 100%; height: 150px; object-fit: cover;" src="<%-data.mainURL%>/<%- data.profileImage%>" />
+									<% data.mainURL %>
+								</figure>
+							</div>
+						</div>
+						<div class="col-md-10">
+							<div class="timeline-info">
+							</div>
 						</div>
 					</div>
-					<div class="col-md-10">
-						<div class="timeline-info">
-							<ul>
-								<li class="admin-name">
-									<h5 class="user-name" style="padding-top: 20px; padding-bottom: 20px;"></h5>
-								</li>
-							</ul>
+				</div>
+			</div>
+		</section>
+
+
+
+	</section>
+	<section id="profile-info-wrap">
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" id="page-contents">
+
+							<div class="col-md-3">
+
+							</div>
+							<div class="col-md-6">
+								<div id="profile-info">
+
+
+								<div>
+									<h3><%= data.name %></h3>
+										<button id="followBtn" type="button" name="button">Follow</button>
+									<div>
+										<p><%= data.dob %></p>
+													<p><%= data.aboutMe %></p>
+									</div>
+
+								</div>
+								<div id="followers">
+									<p><a href="#" id="followingAmount"><span id="followingNr"></span><span id="followingTxt"> Following</span></a></p>
+									<p><a href="#" id="followersAmount"><span id="followersNr"></span><span id="followersTxt"> Followers</span></a></p>
+								</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-	<section id="profile info">
-		<div>
-			<h3><%= user.username %></h3>
-				<button id="followBtn" type="button" name="button">Follow</button>
-			<div>
-				<p><%= user.dob %></p>
-							<p><%= user.aboutMe %></p>
-			</div>
 
-		</div>
-		<div>
 
-		</div>
-		<div>
-			<p><a href="#" id="followingAmount"></a></p>
-			<p><a href="#" id="followersAmount"></a></p>
-		</div>
+
+
 	</section>
 	<section>
 		<div class="gap gray-bg">
@@ -75,129 +104,8 @@
 		</div>
 	</section>
 
-		<script>
-			var isHomePage = true;
-
-			var url = window.location.href.split('/');
-			var userURL = url.pop() || url.pop();
-
-
-			function doPost(form) {
-
-				var ajax = new XMLHttpRequest();
-				ajax.open("POST", "/post/add", true);
-
-				ajax.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-
-				var response = JSON.parse(this.responseText);
-
-
-				if (response.status == "success") {
-					document.getElementById("form-add-post").querySelector("input[name='image']").value = "";
-					document.getElementById("form-add-post").querySelector("input[name='video']").value = "";
-					document.getElementById("form-add-post").querySelector("textarea[name='caption']").value = "";
-					document.getElementById("post-img-preview").style.display = "none";
-					document.getElementById("post-video-preview").style.display = "none";
-
-					console.log(response.status);
-
-
-					}
-					showNewsfeed();
-				}
-			};
-
-				var formData = new FormData(form);
-				formData.append("accessToken", localStorage.getItem("accessToken"));
-				ajax.send(formData);
-
-
-
-				return false;
-			}
-
-			function showNewsfeed() {
-				var ajax = new XMLHttpRequest();
-				ajax.open("POST", "/post/timeline", true);
-
-				ajax.onreadystatechange = function() {
-					if (this.readyState == 4 && this.status == 200) {
-
-						var response = JSON.parse(this.responseText);
-
-						var html = "";
-						for (var a = 0; a < response.data.length; a++) {
-							var data = response.data[a];
-
-							html += '<div class="central-meta item">';
-								html += '<div class="user-post">';
-									html += '<div class="friend-info">';
-
-										html += '<figure>';
-											html += '<img src="' + mainURL + "/" + data.user.profileImage + '" style="width: 45px; height: 45px; object-fit: cover;">';
-										html += '</figure>';
-
-										html += '<div class="friend-name">';
-											html += '<ins>';
-												if (data.type == "post")
-												{
-													html += '<a href="/profile/u/' + data.user.username + '">';
-														html += data.user.name;
-													html += '</a>';
-												}
-												else
-												{
-													html += data.user.name;
-												}
-											html += '</ins>';
-
-											var createdAt = new Date(data.createdAt);
-											var date = createdAt.getDate() + "";
-											date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear();
-
-											html += '<span>Published: ' + date + '</span>';
-										html += '</div>';
-
-										html += '<div class="post-meta">';
-
-											html += '<div class="description">';
-												html += '<p>';
-													html += data.caption;
-												html += '</p>';
-											html += '</div>';
-
-											if (data.image != "") {
-												html += '<img src="' + mainURL + "/" + data.image + '">';
-											}
-
-											if (data.video != "") {
-												html += '<video style="height: 359px; width: 100%;" controls src="' + mainURL + "/" + data.video + '"></video>';
-											}
-											html += '</div>';
-										html += '</div>';
-
-										html += "<div id='post-comments-" + data._id + "'>";
-											html += createCommentsSection(data);
-										html += "</div>";
-
-									html += '</div>';
-									html += '</div>';
-
-
-						}
-						document.getElementById("newsfeed").innerHTML = html;
-					}
-				};
-
-				var formData = new FormData();
-				formData.append("accessToken", localStorage.getItem("accessToken"));
-				formData.append("profile", userURL);
-				ajax.send(formData);
-			}
-		</script>
 </main>
-
+	<script src="/public/js/timeline.js"></script>
 
 <%- include ("includes/footer") %>
 <script src="../../public/js/profile.js"></script>

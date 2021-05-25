@@ -5,11 +5,12 @@ const {User} = require("../models/user");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail");
-
+const security = require('../private/verification');
 
 router.get('/', (req,res)=>{
     res.render('signup');
 })
+
 
 router.post('/', (req,res)=>{
   var name = req.fields.name;
@@ -17,8 +18,18 @@ router.post('/', (req,res)=>{
   var email = req.fields.email;
   var password = req.fields.password;
   var gender = req.fields.gender;
-  //checker hvis en bruger allerede existerer
 
+  var verify = security(req, res)
+
+    if(verify.status == false) {
+        res.json({
+            "status": "error",
+            "message": verify.message
+        })
+    } else {
+
+
+  //checker hvis en bruger allerede existerer
 
   User.findOne({$or:[{email : email}, {username : username}]}).exec((err,user)=>{
       if (user == null) {
@@ -28,6 +39,8 @@ router.post('/', (req,res)=>{
               "email": email,
               "password": password,
               "gender": gender,
+              "profileImage": "public/img/default_profile.jpg",
+              "coverPhoto": "public/img/default_cover.jpg",
               "emailToken": crypto.randomBytes(64).toString("hex"),
               "isVerified": false,
           }
@@ -35,7 +48,7 @@ router.post('/', (req,res)=>{
 
       var newUser = new User(userObj);
 
-      bcrypt.genSalt(10,(err,salt)=>
+      bcrypt.genSaslt(10,(err,salt)=>
       bcrypt.hash(newUser.password,salt,
           (err,hash)=> {
               if(err) throw err;
@@ -61,12 +74,15 @@ router.post('/', (req,res)=>{
                   })
                   .catch((error) => {
                       console.error(error)
-                  })  
+                  })
               })
               .catch(value=> console.log(value));
 
           }));
-
+          res.json({
+            "status": "success",
+            "message": "Thank you for joining our site - remember to verify your email!."
+        });
 
       } else {
            res.json({
@@ -76,7 +92,7 @@ router.post('/', (req,res)=>{
               });
           };
   })
-
+}
 })
 
 

@@ -1,10 +1,10 @@
-<footer>
-	<div class="container">
-		<div class="row">
-		</div>
-	</div>
-</footer>
+<div class="toggleTheme">
+	<button id="theme-toggle" type="button" name="theme"></button>
 </div>
+
+
+
+
 
 <div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
@@ -31,6 +31,7 @@
 <script src="/public/js/main.min.js"></script>
 <script src="/public/js/socket.io.js"></script>
 -->
+<script src="/public/js/themes.js"></script>
 <script>
 
 window.user = null;
@@ -79,20 +80,15 @@ function showMainMenu() {
 
 	if (localStorage.getItem("accessToken")) {
 		html += '<li>';
-			html += '<a href="/pages">Pages</a> ';
+			html += `<a class="navLink" href="/profile/u/${user.username}">Profile</a>`;
 		html += '</li>';
 
 		html += '<li>';
-			html += '<a href="/groups">Groups</a> ';
-
+			html += '<a class="navLink" href="/profile/update">Update profile</a> ';
 		html += '</li>';
 
 		html += '<li>';
-			html += `<a href="/profile/u/${user.username}">Profile</a>`;
-		html += '</li>';
-
-		html += '<li>';
-			html += '<a href="/logout" onclick="return doLogout();">Logout</a>';
+			html += '<a class="navLink"href="/logout" onclick="return doLogout();">Logout</a>';
 		html += '</li>';
 
 

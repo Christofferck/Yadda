@@ -1,5 +1,7 @@
 <html>
 
+
+
 <head>
     <title>Social Network</title>
     <link rel="stylesheet" href="/public/css/main.min.css">
@@ -7,6 +9,7 @@
     <link rel="stylesheet" href="/public/css/color.css">
     <link rel="stylesheet" href="/public/css/responsive.css">
     <link rel="stylesheet" href="/public/css/includes.css">
+    <link id="loadedTheme" rel="stylesheet" href="/public/css/themes/lightTheme.css">
 </head>
 
 <body>
@@ -53,10 +56,10 @@
 						var comment = data.comments[b][0];
 
 						html += '<li>';
-							html += '<div class="comet-avatar">';
-								html += '<img src="' + mainURL + '/' + user.profileImage + '">';
-							html += '</div>';
 
+            html += '<div class="comet-avatar">';
+              html += '<img style="width: 45px; height: 45px; object-fit: cover;" src="' + mainURL + '/' + user.profileImage + '">';
+            html += '</div>';
 							html += '<div class="we-comment">';
 								html += '<div class="coment-head">';
 									html += '<h5><a href="/">' + user.name + '</a></h5>';
@@ -66,7 +69,7 @@
 									date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear();
 
 									html += '<span>' + date + '</span>';
-									html += '<a class="we-reply" href="javascript:void(0);" data-post-id="' + data._id + '" data-comment-id="' + comment._id + '" onclick="prepareToReply(this);" title="Reply"><i class="fa fa-reply"></i></a>';
+
 								html += '</div>';
 
 								html += '<p>' + comment.comment + '</p>';
@@ -74,30 +77,6 @@
 
 							html += '<ul>';
 
-							/*	comment.replies = comment.replies.reverse();
-
-								for (var c = 0; c < comment.replies.length; c++) {
-									var reply = comment.replies[c];
-
-									html += '<li>';
-										html += '<div class="comet-avatar">';
-											html += '<img src="' + mainURL + '/' + reply.user.profileImage + '">';
-										html += '</div>';
-
-										html += '<div class="we-comment">';
-											html += '<div class="coment-head">';
-												html += '<h5><a href="/">' + reply.user.name + '</a></h5>';
-
-												var createdAt = new Date(reply.createdAt);
-												var date = createdAt.getDate() + "";
-												date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear();
-
-												html += '<span>' + date + '</span>';
-											html += '</div>';
-											html += '<p>' + reply.reply + '</p>';
-										html += '</div>';
-									html += '</li>';
-								}*/
 								html += '</ul>';
 
 						html += '</li>';
@@ -106,13 +85,11 @@
 
 					html += '<ul class="we-comet">';
 						html += '<li class="post-comment">';
-							html += '<div class="comet-avatar">';
-								html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';
-							html += '</div>';
+
 							html += '<div class="post-comt-box">';
 								html += '<form method="post" onsubmit="return doPostComment(this);">';
 									html += '<input type="hidden" name="_id" value="' + data._id + '">';
-									html += '<textarea name="comment" placeholder="Post your comment"></textarea>';
+									html += '<textarea class="comment" name="comment" placeholder="Reply to this Yadda"></textarea>';
 									html += '<button type="submit">Post</button>';
 								html += '</form>';
 							html += '</div>';
@@ -159,7 +136,7 @@
 				if (localStorage.getItem("accessToken")) {
 					var html = "";
 
-					html += '<div class="central-meta">';
+					html += '<div class="central-meta newPost">';
 						html += '<div class="new-postbox">';
 							html += '<figure>';
 								html += '<img src="' + mainURL + '/' + window.user.profileImage + '">';

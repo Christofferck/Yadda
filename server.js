@@ -19,6 +19,9 @@ var fileSystem = require("fs");
 var jwt = require("jsonwebtoken");
 var accessTokenSecret = "myAccessTokenSecret1234567890";
 
+
+
+
 app.use("/public", express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
@@ -54,10 +57,6 @@ app.use("/signup", signupR);
 
 const profileR = require('./routes/profile');
 app.use("/profile", profileR);
-
-
-
-
 
 
 

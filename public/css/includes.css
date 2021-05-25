@@ -7,22 +7,6 @@ header {
   padding: 10px;
 }
 
-header nav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-}
-
-header nav >* {
-  margin: 0 100px 0 0;
-}
-
-header nav .settings {
-  position: absolute;
-  right: 0;
-}
-
 .theme-layout {
   height: 100px;
 }
@@ -31,4 +15,35 @@ header nav .settings {
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+/*Theme*/
+
+.toggleTheme {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+}
+
+footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:60px;   /* Height of the footer */
+  background:#6cf;
+}
+
+
+/*Button*/
+
+#theme-toggle {
+  border: none;
+  background: url('/public/img/icons/themeToggleLight.svg') no-repeat;
+  padding: 15px 15px;
+  z-index: 99;
+  cursor: pointer;
+}
+
+#theme-toggle:focus {
+  outline: none;
 }

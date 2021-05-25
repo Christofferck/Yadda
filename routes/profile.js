@@ -25,18 +25,19 @@ router.get('/u/:username', (req, res) => {
         "message": "No user with that username"
       });
     } else {
-      console.log(data);
-      if (username) {
 
-      }
+      data.mainURL = mainURL
+
+      //console.log(data);
+
       res.render("profile", {
-        user: data
+        data: data
       })
     }
 
   })
 
-  console.log(username);
+  ////console.log(username);
 
 
 })
@@ -44,70 +45,86 @@ router.get('/u/:username', (req, res) => {
 
 router.post('/u/:username', (req, res) => {
 
-  const username = req.params.username
-  const accessToken = req.fields.accessToken
+const username = req.params.username
+const accessToken = req.fields.accessToken
 
-  //let followData = follow(req, accessToken)
+//let followData = follow(req, accessToken)
 
-  let owner;
+let owner;
 
-  User.findOne({
-    username: username
-  }).exec((err, user) => {
+User.findOne({accessToken: accessToken}).exec((err, user) => {
     if (user == null) {
       res.json({
         "status": "error",
         "message": "No user with that username"
       });
     } else {
-      //console.log(user);
-      if (user.accessToken == req.fields.accessToken) {
+      ////console.log(user);
+      if (user.username == username) {
         owner = true;
       } else {
         owner = false;
       }
     }
 
-  })
 
-  var followers = [];
-  var following = [];
 
-  User.findOne({accessToken: accessToken}).exec((err, user) => {
-    if (user == null) {
-      res.json({
-        "status": "error",
-        "message": "No user with that username"
-      });
-    } else {
-      following.push(user.following)
-    }
+    var followers = [];
+    var following = [];
 
-    console.log(user.username);
 
-  User.find().all('following', [username]).exec((err, follower) => {
-      for (var i = 0; i < follower.length; i++) {
-        followers.push(follower[i].username)
-        console.log(followers);
-        console.log(follower[i].username);
-      }
 
-      var followData = {
-        followers: followers,
-        following: following
-      }
-      console.log(followData);
+    User.findOne({username: req.params.username}).exec((err, profile) => {
+        if (profile == null) {
+          res.json({
+            "status": "error",
+            "message": "No user with that username"
+          });
+        } else {
+          following.push(profile.following)
+        }
 
-      res.json({
-      "owner": owner,
-      "followData": followData
+        ////console.log(user.username);
+        var followData = {
+          isFollowing: false
+        }
+
+
+        User.find().all('following', [username]).exec((err, follower) => {
+            for (var i = 0; i < follower.length; i++) {
+              followers.push(follower[i].username)
+              if (follower[i].username == user.username) {
+                console.log("FOSD");
+                followData.isFollowing = true;
+              }
+            }
+
+
+
+            followData.followers = followers
+            followData.following = following
+
+
+            res.json({
+              "owner": owner,
+              "followData": followData
+            })
+
+
+
+          })
+        })
+
+
+
     })
-    })
-  })
-
-
 
 })
+
+
+
+
+
 
 //FOLLOW A PROFILE
 
@@ -129,16 +146,23 @@ router.post('/u/:username/follow', async (req, res) => {
     } else {
 
       if (user.following.indexOf(username) == -1) {
-        console.log('follow');
+        //console.log('follow');
         User.updateOne({
           accessToken: accessToken
         }, {
+
           $push: {
             following: username
           }
-        }).exec((err, data) => {})
+        }).exec((err, data) => {
+
+
+
+
+
+        })
       } else {
-        console.log('unfollow');
+        //console.log('unfollow');
         User.updateOne({
           accessToken: accessToken
         }, {
@@ -147,6 +171,15 @@ router.post('/u/:username/follow', async (req, res) => {
           }
         }).exec((err, data) => {})
       }
+
+
+
+
+
+
+
+
+
     }
   })
 })
@@ -163,7 +196,7 @@ async function follow(req, accessToken) {
 
 //UPDATE PROFILE
 router.get('/update', (req, res) => {
-  //console.log(req.user.email);
+  ////console.log(req.user.email);
   res.render('updateprofile');
 })
 
@@ -205,12 +238,12 @@ router.post('/update', async (req, res) => {
 //UPLOAD
 
 //COVER PHOTO
-router.post('/upload/profileImage', async (req, res) => {
+router.post('/upload/coverPhoto', async (req, res) => {
 
   console.log('upload');
 
   var accessToken = req.fields.accessToken;
-  var coverPhoto = "";
+  var coverPhoto;
 
   User.findOne({
     accessToken: accessToken
@@ -233,12 +266,12 @@ router.post('/upload/profileImage', async (req, res) => {
         // Read the file
         fileSystem.readFile(req.files.coverPhoto.path, function(err, data) {
           if (err) throw err;
-          console.log('File read!');
+          //console.log('File read!');
 
           // Write the file
           fileSystem.writeFile(coverPhoto, data, function(err) {
             if (err) throw err;
-            console.log('File written!');
+            //console.log('File written!');
 
             User.findOneAndUpdate({
               accessToken: accessToken
@@ -268,7 +301,7 @@ router.post('/upload/profileImage', async (req, res) => {
           // Delete the file
           fileSystem.unlink(req.files.coverPhoto.path, function(err) {
             if (err) throw err;
-            console.log('File deleted!');
+            //console.log('File deleted!');
           });
         });
       } else {
@@ -287,7 +320,7 @@ router.post('/upload/profileImage', async (req, res) => {
 
 
 router.post('/upload/profileimg', async (req, res) => {
-  console.log('upload');
+  //console.log('upload');
 
   var accessToken = req.fields.accessToken;
   var profileImage = "";
@@ -313,12 +346,12 @@ router.post('/upload/profileimg', async (req, res) => {
         // Read the file
         fileSystem.readFile(req.files.profileImage.path, function(err, data) {
           if (err) throw err;
-          console.log('File read!');
+          //console.log('File read!');
 
           // Write the file
           fileSystem.writeFile(profileImage, data, function(err) {
             if (err) throw err;
-            console.log('File written!');
+            //console.log('File written!');
 
             User.findOneAndUpdate({
               accessToken: accessToken
@@ -348,7 +381,7 @@ router.post('/upload/profileimg', async (req, res) => {
           // Delete the file
           fileSystem.unlink(req.files.profileImage.path, function(err) {
             if (err) throw err;
-            console.log('File deleted!');
+            //console.log('File deleted!');
           });
         });
       } else {
@@ -371,13 +404,13 @@ router.post('/upload/profileimg', async (req, res) => {
 
 router.post("/timeline", function(req, res) {
   var accessToken = req.fields.accessToken;
-  //console.log("token: " + accessToken);
+  ////console.log("token: " + accessToken);
 
 
   User.findOne({
     accessToken: accessToken
   }).exec((err, user) => {
-    //console.log(user);
+    ////console.log(user);
     if (user == null) {
       res.json({
         "status": "error",
@@ -387,11 +420,14 @@ router.post("/timeline", function(req, res) {
 
       var ids = [];
       ids.push(user._id);
-      Post.find({"user._id": {$in: ids}
+      Post.find({
+        "user._id": {
+          $in: ids
+        }
       }).sort({
         "createdAt": -1
       }).limit(5).exec((err, data) => {
-        //console.log(data);
+        ////console.log(data);
         res.json({
           "status": "success",
           "message": "Record has been fetched",
@@ -401,7 +437,6 @@ router.post("/timeline", function(req, res) {
     }
   })
 })
-
 
 
 

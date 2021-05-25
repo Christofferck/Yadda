@@ -4,7 +4,7 @@
 	<div class="feature-photo">
 
 		<figure>
-			<img class="cover-photo" id="cover-photo" style="width: 100%; height: 700px; object-fit: cover;" onerror="this.src = '/public/img/default_cover.jpg'" />
+			<img class="cover-photo" id="cover-photo" style="width: 100%; height: 400px; object-fit: cover;" onerror="this.src = '/public/img/default_cover.jpg'" />
 		</figure>
 
 		<form class="edit-phto" id="form-cover-photo" onsubmit="return false;">
@@ -35,11 +35,7 @@
 				</div>
 				<div class="col-md-10">
 					<div class="timeline-info">
-						<ul>
-							<li class="admin-name">
-								<h5 class="user-name" style="padding-top: 20px; padding-bottom: 20px;"></h5>
-							</li>
-						</ul>
+
 					</div>
 				</div>
 			</div>
@@ -54,7 +50,7 @@
 		document.querySelector(".cover-photo").setAttribute("src", mainURL + "/" + window.user.coverPhoto);
 		document.querySelector(".profile-image").setAttribute("src", mainURL + "/" + window.user.profileImage);
 
-		document.querySelector(".user-name").innerHTML = window.user.name;
+
 		document.querySelector(".name").value = window.user.name;
 		document.querySelector(".email").value = window.user.email;
 		document.querySelector(".dob").value = window.user.dob;
