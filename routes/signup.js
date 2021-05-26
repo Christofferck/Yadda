@@ -31,11 +31,7 @@ router.post('/', (req, res) => {
 
     //checker hvis en bruger allerede existerer
 
-    User.findOne({
-      $or: [{
-        email: email
-      }, {
-        username: username
+    User.findOne({$or: [{email: email}, {username: username
       }]
     }).exec((err, user) => {
       if (user == null) {
@@ -54,7 +50,7 @@ router.post('/', (req, res) => {
 
         var newUser = new User(userObj);
 
-        bcrypt.genSaslt(10, (err, salt) =>
+        bcrypt.genSalt(10, (err, salt) =>
           bcrypt.hash(newUser.password, salt,
             (err, hash) => {
               if (err) throw err;

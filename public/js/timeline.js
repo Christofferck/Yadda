@@ -82,7 +82,7 @@ function showNewsfeed() {
 
                 var createdAt = new Date(data.createdAt);
                 var date = createdAt.getDate() + "";
-                date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear() + ", " + createdAt.getHours() + ":" + createdAt.getMinutes()
+                date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear() + ", " + createdAt.getHours() + ":" + (createdAt.getMinutes()<10?'0':'') + createdAt.getMinutes()
 
                 html += '<span>' + date + '</span>';
               html += '</div>';

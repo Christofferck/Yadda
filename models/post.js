@@ -54,9 +54,7 @@ user :{
     username: {
       type: String
     },
-    profileImage: {
-      type: String
-    },
+
 
     type  : Object,
 }

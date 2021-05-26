@@ -67,9 +67,7 @@ router.post('/add', async (req, res) => {
     })
   } else {
 
-    User.findOne({
-      accessToken: accessToken
-    }).exec((err, user) => {
+    User.findOne({accessToken: accessToken}).exec((err, user) => {
       if (user == null) {
         res.json({
           "status": "error",
@@ -118,7 +116,6 @@ router.post('/add', async (req, res) => {
         }
 
 
-
         var postObj = {
           "caption": caption,
           "image": image,
@@ -129,7 +126,6 @@ router.post('/add', async (req, res) => {
             "_id": user._id,
             "name": user.name,
             "username": user.username,
-            "profileImage": user.profileImage
           }
         }
 
@@ -197,9 +193,7 @@ router.post("/timeline", async function(req, res) {
         for (var i = 0; i < post.length; i++) {
           data = post
 
-          User.find({
-            username: data[i].user.username
-          }).exec((err, userData) => {
+          User.find({username: data[i].user.username}).exec((err, userData) => {
 
             data[a].user.name = userData[0].name
             data[a].user.profileImage = userData[0].profileImage
@@ -218,12 +212,7 @@ router.post("/timeline", async function(req, res) {
           })
         }
       }
-
-
     }
-
-
-
   })
 })
 
@@ -254,9 +243,7 @@ router.post("/comment", async function(req, res) {
       });
     } else {
 
-      Post.findOne({
-        _id: _id
-      }).exec((err, post) => {
+      Post.findOne({_id: _id}).exec((err, post) => {
         if (post == null) {
           res.json({
             "status": "error",
@@ -267,9 +254,7 @@ router.post("/comment", async function(req, res) {
           var commentId = mongoose.Types.ObjectId();
 
 
-          Post.updateOne({
-            _id: _id
-          }, {
+          Post.updateOne({_id: _id}, {
             $push: {
               comments: {
                 _id: commentId,
@@ -284,13 +269,7 @@ router.post("/comment", async function(req, res) {
             }
 
           }).exec((err, data) => {
-            User.updateOne({
-              $and: [{
-                _id: _id
-              }, {
-                "posts._id": post._id
-              }]
-            }, {
+            User.updateOne({$and: [{_id: _id}, {"posts._id": post._id}]}, {
               $push: {
                 "posts.$[].comments": {
                   "_id": commentId,
@@ -305,9 +284,7 @@ router.post("/comment", async function(req, res) {
               }
             });
 
-            Post.findOne({
-              _id: _id
-            }).exec((err, updatePost) => {
+            Post.findOne({_id: _id}).exec((err, updatePost) => {
               res.json({
                 "status": "success",
                 "message": "Comment has been posted.",
@@ -326,6 +303,8 @@ router.post("/comment", async function(req, res) {
   });
 })
 
+
+
 // Hashtags
 
 const hashTag = function(yadda) {
@@ -340,13 +319,6 @@ const hashTag = function(yadda) {
 router.get('/hashtag/:hashtag', (req, res) => {
   res.render('index');
 
-  Post.find({
-    caption: /req.params.hashtag/
-  }, function(errs, data) {
-    if (errs) {
-      res.send(errs);
-    }
-  });
 })
 
 router.post("/hashtag/:hashtag", async function(req, res) {
@@ -365,15 +337,9 @@ router.post("/hashtag/:hashtag", async function(req, res) {
       });
     } else {
 
-      var ids = [];
-      ids.push(user._id);
-      Post.find({
-        "caption": {
-          "$regex": req.params.hashtag,
-          "$options": "i"
+      Post.find({"caption": {"$regex": "#" + req.params.hashtag, "$options": "i"
         }
-      }).sort({
-        "createdAt": -1
+      }).sort({"createdAt": -1
       }).exec((err, data) => {
 
         var tag = 0;
