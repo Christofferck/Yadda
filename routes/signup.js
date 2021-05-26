@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose')
-const {User} = require("../models/user");
+const {
+  User
+} = require("../models/user");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const sgMail = require("@sendgrid/mail");
@@ -31,7 +33,11 @@ router.post('/', (req, res) => {
 
     //checker hvis en bruger allerede existerer
 
-    User.findOne({$or: [{email: email}, {username: username
+    User.findOne({
+      $or: [{
+        email: email
+      }, {
+        username: username
       }]
     }).exec((err, user) => {
       if (user == null) {
@@ -50,24 +56,37 @@ router.post('/', (req, res) => {
 
         var newUser = new User(userObj);
 
+
+
+
         bcrypt.genSalt(10, (err, salt) =>
           bcrypt.hash(newUser.password, salt,
-            (err, hash) => {
+            async (err, hash) => {
               if (err) throw err;
               //save pass to hash
               newUser.password = hash;
               //save user
               newUser.save()
-                .then((value) => {
+                .then(async (value) => {
                   console.log(value)
-                  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+                  sgMail.setApiKey(process.env.SENDGRID_API_KEY /* Spørg Erik eller Nickolaj for at få en brugbar API KEY til afsending af email*/ )
                   console.log(process.env.SENDGRID_API_KEY);
-                  const msg = {
-                    to: userObj.email,
-                    from: 'nickolaj99@outlook.com',
-                    subject: 'Sending with SendGrid is Fun',
-                    text: 'and easy to do anywhere, even with Node.js',
-                    html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                  window.location.href = "/verify-email";
+                  const emailmsg = {
+                    from: "erikhey7@hotmail.com",
+                    to: user.email,
+                    subject: "YaSite - veryify your email.",
+                    text: `
+                            Hello, thanks for registering to our site.
+                            Please copy and paste the link below to verify your account.
+                            http://${req.headers.host}/verify-email?token=${user.emailToken}
+                            `,
+                    html: `
+                            <h1>Hello!</h1>
+                                <p>Thanks for registering on our site.</p>
+                                <p>Please click the link below to verify your account.</p>
+                                <a>http://${req.headers.host}/verify-email?token=${user.emailToken}</a>
+                            `
                   }
                   sgMail.send(msg)
                     .then((response) => {
