@@ -69,8 +69,7 @@ router.post('/', (req, res) => {
               newUser.save()
                 .then(async (value) => {
                   console.log(value)
-                  sgMail.setApiKey(process.env.SENDGRID_API_KEY /* Spørg Erik eller Nickolaj for at få en brugbar API KEY til afsending af email*/ )
-                  console.log(process.env.SENDGRID_API_KEY);
+                  sgMail.setApiKey("") /*BRUG API NØGLEN HER*/
                   window.location.href = "/verify-email";
                   const emailmsg = {
                     from: "erikhey7@hotmail.com",
