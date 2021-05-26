@@ -28,7 +28,6 @@ router.get('/u/:username', (req, res) => {
 
       data.mainURL = mainURL
 
-      //console.log(data);
 
       res.render("profile", {
         data: data
@@ -37,7 +36,6 @@ router.get('/u/:username', (req, res) => {
 
   })
 
-  ////console.log(username);
 
 
 })
@@ -45,21 +43,23 @@ router.get('/u/:username', (req, res) => {
 
 router.post('/u/:username', (req, res) => {
 
-const username = req.params.username
-const accessToken = req.fields.accessToken
+  const username = req.params.username
+  const accessToken = req.fields.accessToken
 
-//let followData = follow(req, accessToken)
 
-let owner;
 
-User.findOne({accessToken: accessToken}).exec((err, user) => {
+  let owner;
+
+  User.findOne({
+    accessToken: accessToken
+  }).exec((err, user) => {
     if (user == null) {
       res.json({
         "status": "error",
         "message": "No user with that username"
       });
     } else {
-      ////console.log(user);
+
       if (user.username == username) {
         owner = true;
       } else {
@@ -74,50 +74,52 @@ User.findOne({accessToken: accessToken}).exec((err, user) => {
 
 
 
-    User.findOne({username: req.params.username}).exec((err, profile) => {
-        if (profile == null) {
-          res.json({
-            "status": "error",
-            "message": "No user with that username"
-          });
-        } else {
-          following.push(profile.following)
+    User.findOne({
+      username: req.params.username
+    }).exec((err, profile) => {
+      if (profile == null) {
+        res.json({
+          "status": "error",
+          "message": "No user with that username"
+        });
+      } else {
+        following.push(profile.following)
+      }
+
+
+      var followData = {
+        isFollowing: false
+      }
+
+
+      User.find().all('following', [username]).exec((err, follower) => {
+        for (var i = 0; i < follower.length; i++) {
+          followers.push(follower[i].username)
+          if (follower[i].username == user.username) {
+
+            followData.isFollowing = true;
+          }
         }
 
-        ////console.log(user.username);
-        var followData = {
-          isFollowing: false
-        }
 
 
-        User.find().all('following', [username]).exec((err, follower) => {
-            for (var i = 0; i < follower.length; i++) {
-              followers.push(follower[i].username)
-              if (follower[i].username == user.username) {
-                console.log("FOSD");
-                followData.isFollowing = true;
-              }
-            }
+        followData.followers = followers
+        followData.following = following
 
 
-
-            followData.followers = followers
-            followData.following = following
-
-
-            res.json({
-              "owner": owner,
-              "followData": followData
-            })
-
-
-
-          })
+        res.json({
+          "owner": owner,
+          "followData": followData
         })
 
 
 
+      })
     })
+
+
+
+  })
 
 })
 
@@ -146,7 +148,7 @@ router.post('/u/:username/follow', async (req, res) => {
     } else {
 
       if (user.following.indexOf(username) == -1) {
-        //console.log('follow');
+
         User.updateOne({
           accessToken: accessToken
         }, {
@@ -162,7 +164,7 @@ router.post('/u/:username/follow', async (req, res) => {
 
         })
       } else {
-        //console.log('unfollow');
+
         User.updateOne({
           accessToken: accessToken
         }, {
@@ -196,7 +198,7 @@ async function follow(req, accessToken) {
 
 //UPDATE PROFILE
 router.get('/update', (req, res) => {
-  ////console.log(req.user.email);
+
   res.render('updateprofile');
 })
 
@@ -240,7 +242,6 @@ router.post('/update', async (req, res) => {
 //COVER PHOTO
 router.post('/upload/coverPhoto', async (req, res) => {
 
-  console.log('upload');
 
   var accessToken = req.fields.accessToken;
   var coverPhoto;
@@ -266,12 +267,12 @@ router.post('/upload/coverPhoto', async (req, res) => {
         // Read the file
         fileSystem.readFile(req.files.coverPhoto.path, function(err, data) {
           if (err) throw err;
-          //console.log('File read!');
+
 
           // Write the file
           fileSystem.writeFile(coverPhoto, data, function(err) {
             if (err) throw err;
-            //console.log('File written!');
+
 
             User.findOneAndUpdate({
               accessToken: accessToken
@@ -301,7 +302,7 @@ router.post('/upload/coverPhoto', async (req, res) => {
           // Delete the file
           fileSystem.unlink(req.files.coverPhoto.path, function(err) {
             if (err) throw err;
-            //console.log('File deleted!');
+
           });
         });
       } else {
@@ -320,7 +321,7 @@ router.post('/upload/coverPhoto', async (req, res) => {
 
 
 router.post('/upload/profileimg', async (req, res) => {
-  //console.log('upload');
+
 
   var accessToken = req.fields.accessToken;
   var profileImage = "";
@@ -338,7 +339,7 @@ router.post('/upload/profileimg', async (req, res) => {
 
         if (user.profileImage != "") {
           fileSystem.unlink(user.profileImage, function(error) {
-            //
+
           });
         }
         profileImage = "public/images/" + new Date().getTime() + "-" + req.files.profileImage.name;
@@ -346,12 +347,11 @@ router.post('/upload/profileimg', async (req, res) => {
         // Read the file
         fileSystem.readFile(req.files.profileImage.path, function(err, data) {
           if (err) throw err;
-          //console.log('File read!');
+
 
           // Write the file
           fileSystem.writeFile(profileImage, data, function(err) {
             if (err) throw err;
-            //console.log('File written!');
 
             User.findOneAndUpdate({
               accessToken: accessToken
@@ -381,7 +381,7 @@ router.post('/upload/profileimg', async (req, res) => {
           // Delete the file
           fileSystem.unlink(req.files.profileImage.path, function(err) {
             if (err) throw err;
-            //console.log('File deleted!');
+
           });
         });
       } else {
@@ -404,13 +404,12 @@ router.post('/upload/profileimg', async (req, res) => {
 
 router.post("/timeline", function(req, res) {
   var accessToken = req.fields.accessToken;
-  ////console.log("token: " + accessToken);
 
 
   User.findOne({
     accessToken: accessToken
   }).exec((err, user) => {
-    ////console.log(user);
+
     if (user == null) {
       res.json({
         "status": "error",
@@ -427,7 +426,7 @@ router.post("/timeline", function(req, res) {
       }).sort({
         "createdAt": -1
       }).limit(5).exec((err, data) => {
-        ////console.log(data);
+
         res.json({
           "status": "success",
           "message": "Record has been fetched",

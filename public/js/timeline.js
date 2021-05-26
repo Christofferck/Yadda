@@ -17,11 +17,8 @@ function doPost(form) {
     document.getElementById("form-add-post").querySelector("textarea[name='caption']").value = "";
     document.getElementById("post-img-preview").style.display = "none";
     document.getElementById("post-video-preview").style.display = "none";
-
-    console.log(response.status);
-
-
     }
+
     var response = JSON.parse(this.responseText);
                           alert(response.message);
     showNewsfeed();

@@ -47,7 +47,7 @@ router.get("/:id", function(req, res) {
 
 //ADD POST
 router.post('/add', async (req, res) => {
-  //console.log('post add');
+
   var accessToken = req.fields.accessToken;
   var caption = req.fields.caption;
   var image = "";
@@ -60,7 +60,7 @@ router.post('/add', async (req, res) => {
 
   var verify = security(req, res)
 
-  if ( verify.status == false) {
+  if (verify.status == false) {
     res.json({
       "status": "error",
       "message": verify.message
@@ -83,18 +83,17 @@ router.post('/add', async (req, res) => {
           // Read the file
           fileSystem.readFile(req.files.image.path, function(err, data) {
             if (err) throw err;
-            //console.log('File read!');
+
 
             // Write the file
             fileSystem.writeFile(image, data, function(err) {
               if (err) throw err;
-              //console.log('File written!');
+
             });
 
             // Delete the file
             fileSystem.unlink(req.files.image.path, function(err) {
               if (err) throw err;
-              //console.log('File deleted!');
             });
           });
         }
@@ -105,18 +104,15 @@ router.post('/add', async (req, res) => {
           // Read the file
           fileSystem.readFile(req.files.video.path, function(err, data) {
             if (err) throw err;
-            //console.log('File read!');
 
             // Write the file
             fileSystem.writeFile(video, data, function(err) {
               if (err) throw err;
-              //console.log('File written!');
             });
 
             // Delete the file
             fileSystem.unlink(req.files.video.path, function(err) {
               if (err) throw err;
-              //console.log('File deleted!');
             });
           });
         }
@@ -158,46 +154,44 @@ router.post('/add', async (req, res) => {
 
 router.post("/timeline", async function(req, res) {
   var accessToken = req.fields.accessToken;
-  console.log("token: " + accessToken);
 
 
   User.findOne({accessToken: accessToken}).exec((err, user) => {
-    //console.log(user);
+
     if (user == null) {
       res.json({
         "status": "error",
         "message": "User has been logged out. Please login again."
       });
+
     } else {
 
-      //console.log(user.following.length);
-
       var data;
-      var d = user.following;
-      d.push(user.username)
+      var userAndFollowing = user.following;
+      userAndFollowing.push(user.username)
 
-      //console.log(user.following);
+
       if (req.fields.profile !== undefined) {
-        Post.find({'user.username': {$in: [req.fields.profile]}}).exec((err, post) => {
-          //console.log("more than follwers" + post)
+        Post.find({'user.username': {$in: [req.fields.profile]}}).sort({"createdAt": -1}).exec((err, post) => {
+
           returnYaddas(post)
         })
       } else {
-      if (user.following.length == 0 || user.following[0] == user.username) {
-        Post.find({}).sort({"createdAt": -1}).exec((err, post) => {
+        if (user.following.length == 0 || user.following[0] == user.username) {
+          Post.find({}).sort({"createdAt": -1}).exec((err, post) => {
 
-          //console.log("null follwers" + post)
-          returnYaddas(post)
-        })
-      } else {
-        //console.log(d);
-        Post.find({'user.username': {$in: d}}).exec((err, post) => {
-          //console.log("more than follwers" + post)
-          returnYaddas(post)
-        })
 
+            returnYaddas(post)
+          })
+        } else {
+
+          Post.find({'user.username': {$in: userAndFollowing}}).sort({"createdAt": -1}).exec((err, post) => {
+
+            returnYaddas(post)
+          })
+
+        }
       }
-    }
 
       function returnYaddas(post) {
         dataArr = []
@@ -206,7 +200,9 @@ router.post("/timeline", async function(req, res) {
         for (var i = 0; i < post.length; i++) {
           data = post
 
-          User.find({username: data[i].user.username}).exec((err, userData) => {
+          User.find({
+            username: data[i].user.username
+          }).exec((err, userData) => {
 
             data[a].user.name = userData[0].name
             data[a].user.profileImage = userData[0].profileImage
@@ -214,8 +210,8 @@ router.post("/timeline", async function(req, res) {
 
             a++
 
-            if (a === post.length) { // and then test if all done
-              //console.log(dataArr[1]);
+            if (a === post.length) {
+
               res.json({
                 "status": "success",
                 "message": "Record has been fetched",
@@ -243,7 +239,7 @@ router.post("/timeline", async function(req, res) {
 
 router.post("/comment", async function(req, res) {
 
-  //console.log('comment');
+
 
   var accessToken = req.fields.accessToken;
   var _id = req.fields._id;
@@ -253,7 +249,7 @@ router.post("/comment", async function(req, res) {
   User.findOne({
     accessToken: accessToken
   }).exec((err, user) => {
-    //console.log(user);
+
     if (user == null) {
       res.json({
         "status": "error",
@@ -272,7 +268,7 @@ router.post("/comment", async function(req, res) {
         } else {
 
           var commentId = mongoose.Types.ObjectId();
-          //console.log('comment ID ' + commentId);
+
 
           Post.updateOne({
             _id: _id
@@ -291,10 +287,6 @@ router.post("/comment", async function(req, res) {
             }
 
           }).exec((err, data) => {
-            if (err) {
-              //console.log(err);
-            }
-
             User.updateOne({
               $and: [{
                 _id: _id
@@ -319,7 +311,6 @@ router.post("/comment", async function(req, res) {
             Post.findOne({
               _id: _id
             }).exec((err, updatePost) => {
-              //console.log(updatePost);
               res.json({
                 "status": "success",
                 "message": "Comment has been posted.",
@@ -363,13 +354,13 @@ router.get('/hashtag/:hashtag', (req, res) => {
 
 router.post("/hashtag/:hashtag", async function(req, res) {
   var accessToken = req.fields.accessToken;
-  //console.log("token: " + accessToken);
+
 
 
   User.findOne({
     accessToken: accessToken
   }).exec((err, user) => {
-    //console.log(user);
+
     if (user == null) {
       res.json({
         "status": "error",
@@ -387,8 +378,7 @@ router.post("/hashtag/:hashtag", async function(req, res) {
       }).sort({
         "createdAt": -1
       }).exec((err, data) => {
-        //console.log(data)
-        //console.log(data[0].caption);
+
         var tag = 0;
         for (let index = 0; index < data.length; index++) {
           data[index].caption = hashTag(data[index].caption);

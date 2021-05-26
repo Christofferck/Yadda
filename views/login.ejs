@@ -60,7 +60,7 @@
 					if (response.status == "success") {
 						var accessToken = response.accessToken;
 						localStorage.setItem("accessToken", accessToken);
-						console.log()
+						
 						if (response.profileImage == "") {
 							window.location.href = "/profile/update";
 						} else {
