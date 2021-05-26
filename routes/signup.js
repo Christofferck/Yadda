@@ -69,7 +69,7 @@ router.post('/', (req, res) => {
               newUser.save()
                 .then(async (value) => {
                   console.log(value)
-                  sgMail.setApiKey("") /*BRUG API NØGLEN HER*/
+                  sgMail.setApiKey(" ") /*BRUG API NØGLEN HER*/
                   window.location.href = "/verify-email";
                   const emailmsg = {
                     from: "erikhey7@hotmail.com",
