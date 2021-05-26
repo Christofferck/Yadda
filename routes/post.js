@@ -326,9 +326,7 @@ router.post("/hashtag/:hashtag", async function(req, res) {
 
 
 
-  User.findOne({
-    accessToken: accessToken
-  }).exec((err, user) => {
+  User.findOne({accessToken: accessToken}).exec((err, user) => {
 
     if (user == null) {
       res.json({
@@ -337,29 +335,59 @@ router.post("/hashtag/:hashtag", async function(req, res) {
       });
     } else {
 
-      Post.find({"caption": {"$regex": "#" + req.params.hashtag, "$options": "i"
-        }
-      }).sort({"createdAt": -1
-      }).exec((err, data) => {
+      Post.find({"caption": {"$regex": "#" + req.params.hashtag, "$options": "i"}}).sort({"createdAt": -1}).exec((err, data) => {
 
         var tag = 0;
-        for (let index = 0; index < data.length; index++) {
-          data[index].caption = hashTag(data[index].caption);
-          tag++
-        }
-        if (
-          tag == data.length
-        ) {
-          res.json({
-            "status": "success",
-            "message": "Record has been fetched",
-            "data": data
+        for (let i = 0; i < data.length; i++) {
+
+          User.find({username: data[i].user.username}).exec((err, userData) => {
+            data[i].user.name = userData[0].name
+            data[i].user.profileImage = userData[0].profileImage
+
+            data[i].caption = hashTag(data[i].caption);
+            tag++
+            console.log(data);
+            if (tag == data.length) {
+              res.json({
+                "status": "success",
+                "message": "Record has been fetched",
+                "data": data
+              })
+            }
           })
         }
       })
     }
   })
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
