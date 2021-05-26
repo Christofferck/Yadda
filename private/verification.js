@@ -10,7 +10,7 @@ function verification(req, res) {
   for (const [key, value] of Object.entries(req.fields)) {
 
     if (key !== "email" && key !== "accessToken" && key !== "post") {
-      let test = value.match(/[^a-zA-Z0-9# ]/)
+      let test = value.match(/[^a-zA-Z0-9æøå#!,.-_ ]/)
 
 
       if (test !== null) {

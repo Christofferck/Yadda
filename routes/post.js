@@ -125,9 +125,6 @@ router.post('/add', async (req, res) => {
           "video": video,
           "type": type,
           "createdAt": createdAt,
-          "likers": [],
-          "comments": [],
-          "shares": [],
           "user": {
             "_id": user._id,
             "name": user.name,
