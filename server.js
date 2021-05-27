@@ -57,7 +57,8 @@ app.use("/signup", signupR);
 const profileR = require('./routes/profile');
 app.use("/profile", profileR);
 
-
+const verifyR = require('./routes/verify');
+app.use("/verify", verifyR);
 
 
 
