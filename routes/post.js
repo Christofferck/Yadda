@@ -148,7 +148,7 @@ router.post('/add', async (req, res) => {
 router.post("/timeline", async function(req, res) {
   var accessToken = req.fields.accessToken;
 
-  console.log(req.fields);
+
 
   User.findOne({accessToken: accessToken}).exec((err, user) => {
 
@@ -164,11 +164,11 @@ router.post("/timeline", async function(req, res) {
       var userAndFollowing = user.following;
       userAndFollowing.push(user.username)
 
-        console.log(req.fields.profile);
+
 
       if (req.fields.profile !== undefined) {
         Post.find({'user.username': {$in: [req.fields.profile]}}).sort({"createdAt": -1}).exec((err, post) => {
-          console.log(post);
+
           returnYaddas(post)
         })
       } else {
@@ -345,7 +345,6 @@ router.post("/hashtag/:hashtag", async function(req, res) {
 
             data[i].caption = hashTag(data[i].caption);
             tag++
-            console.log(data);
             if (tag == data.length) {
               res.json({
                 "status": "success",
