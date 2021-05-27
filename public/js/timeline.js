@@ -36,14 +36,32 @@ function doPost(form) {
 
 function showNewsfeed() {
 
+  console.log(window.location.href);
+
   var url = window.location.href.split('/');
-  var hashtagURL = url.pop() || url.pop();
+
+  console.log(url);
+  var pos = url.indexOf("u");
+  var user = url[pos];
+  pos++
+  var profile = url[pos];
+
+  console.log(profile);
 
 
-  var postReq = "/post/timeline"
-  if(url.slice(-2, -1)[0] == 'post') {
-    postReq = `/post/hashtag/${hashtagURL}`
+  var hashtag = url.indexOf("hashtag");
+  hashtag++
+  var postReq = url[hashtag];
+
+
+  if(postReq == "http:") {
+    postReq = "/post/timeline"
   }
+
+  console.log(postReq);
+
+  const getLastItem = thePath => thePath.substring(thePath.lastIndexOf('/') + 1)
+    console.log(getLastItem);
 
 
   var ajax = new XMLHttpRequest();
@@ -121,5 +139,9 @@ function showNewsfeed() {
 
   var formData = new FormData();
   formData.append("accessToken", localStorage.getItem("accessToken"));
+  if (user == "u") {
+    formData.append("profile", profile);
+  }
+
   ajax.send(formData);
 }

@@ -148,6 +148,7 @@ router.post('/add', async (req, res) => {
 router.post("/timeline", async function(req, res) {
   var accessToken = req.fields.accessToken;
 
+  console.log(req.fields);
 
   User.findOne({accessToken: accessToken}).exec((err, user) => {
 
@@ -159,27 +160,25 @@ router.post("/timeline", async function(req, res) {
 
     } else {
 
-      var data;
+
       var userAndFollowing = user.following;
       userAndFollowing.push(user.username)
 
+        console.log(req.fields.profile);
 
       if (req.fields.profile !== undefined) {
         Post.find({'user.username': {$in: [req.fields.profile]}}).sort({"createdAt": -1}).exec((err, post) => {
-
+          console.log(post);
           returnYaddas(post)
         })
       } else {
         if (user.following.length == 0 || user.following[0] == user.username) {
           Post.find({}).sort({"createdAt": -1}).exec((err, post) => {
-
-
             returnYaddas(post)
           })
         } else {
 
           Post.find({'user.username': {$in: userAndFollowing}}).sort({"createdAt": -1}).exec((err, post) => {
-
             returnYaddas(post)
           })
 
@@ -187,7 +186,8 @@ router.post("/timeline", async function(req, res) {
       }
 
       function returnYaddas(post) {
-        dataArr = []
+        var dataArr = []
+        var data;
         var a = 0;
 
         for (var i = 0; i < post.length; i++) {
@@ -323,7 +323,6 @@ router.get('/hashtag/:hashtag', (req, res) => {
 
 router.post("/hashtag/:hashtag", async function(req, res) {
   var accessToken = req.fields.accessToken;
-
 
 
   User.findOne({accessToken: accessToken}).exec((err, user) => {
