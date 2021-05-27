@@ -11,9 +11,7 @@ function changeTheme() {
     lightMode()
   }
 
-
   themeToggle.addEventListener('click', toggleTheme)
-
 
   //Skifter mellem et lyst og mørkt tema
   function toggleTheme() {
@@ -42,10 +40,7 @@ function changeTheme() {
     themeToggle.style.backgroundImage = "url('/public/img/icons/themeToggleLight.svg')";
     localStorage.setItem('theme', 'lightMode')
   }
-
 }
 
 
-
 document.addEventListener("DOMContentLoaded", changeTheme, false);
-//window.addEventListener('load', init)

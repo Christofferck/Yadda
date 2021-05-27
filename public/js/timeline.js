@@ -36,17 +36,15 @@ function doPost(form) {
 
 function showNewsfeed() {
 
-  console.log(window.location.href);
+
 
   var url = window.location.href.split('/');
 
-  console.log(url);
   var pos = url.indexOf("u");
   var user = url[pos];
   pos++
   var profile = url[pos];
 
-  console.log(profile);
 
 
   var hashtag = url.indexOf("hashtag");
@@ -58,10 +56,10 @@ function showNewsfeed() {
     postReq = "/post/timeline"
   }
 
-  console.log(postReq);
+  
 
   const getLastItem = thePath => thePath.substring(thePath.lastIndexOf('/') + 1)
-    console.log(getLastItem);
+
 
 
   var ajax = new XMLHttpRequest();

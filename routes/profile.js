@@ -46,8 +46,6 @@ router.post('/u/:username', (req, res) => {
   const username = req.params.username
   const accessToken = req.fields.accessToken
 
-
-
   let owner;
 
   User.findOne({
@@ -67,16 +65,10 @@ router.post('/u/:username', (req, res) => {
       }
     }
 
-
-
     var followers = [];
     var following = [];
 
-
-
-    User.findOne({
-      username: req.params.username
-    }).exec((err, profile) => {
+    User.findOne({username: req.params.username}).exec((err, profile) => {
       if (profile == null) {
         res.json({
           "status": "error",
@@ -91,7 +83,6 @@ router.post('/u/:username', (req, res) => {
         isFollowing: false
       }
 
-
       User.find().all('following', [username]).exec((err, follower) => {
         for (var i = 0; i < follower.length; i++) {
           followers.push(follower[i].username)
@@ -101,8 +92,6 @@ router.post('/u/:username', (req, res) => {
           }
         }
 
-
-
         followData.followers = followers
         followData.following = following
 
@@ -111,8 +100,6 @@ router.post('/u/:username', (req, res) => {
           "owner": owner,
           "followData": followData
         })
-
-
 
       })
     })
@@ -137,9 +124,7 @@ router.post('/u/:username/follow', async (req, res) => {
 
 
 
-  User.findOne({
-    accessToken: accessToken
-  }).exec((err, user) => {
+  User.findOne({accessToken: accessToken}).exec((err, user) => {
     if (user == null) {
       res.json({
         "status": "error",
@@ -149,19 +134,11 @@ router.post('/u/:username/follow', async (req, res) => {
 
       if (user.following.indexOf(username) == -1) {
 
-        User.updateOne({
-          accessToken: accessToken
-        }, {
-
+        User.updateOne({accessToken: accessToken}, {
           $push: {
             following: username
           }
         }).exec((err, data) => {
-
-
-
-
-
         })
       } else {
 
@@ -173,15 +150,6 @@ router.post('/u/:username/follow', async (req, res) => {
           }
         }).exec((err, data) => {})
       }
-
-
-
-
-
-
-
-
-
     }
   })
 })
